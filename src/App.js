@@ -5,6 +5,7 @@ import Reviews from "./components/Reviews";
 import "./fontAwesome";
 import Footer from "./components/Footer";
 import { ParallaxProvider, Parallax } from "react-scroll-parallax";
+import EmployeeDashboard from "./components/Employee/EmployeeDashboard";
 
 function App() {
   return (
