@@ -21,17 +21,17 @@ function EmployeeDashboard() {
     };
 
     const [doctors, setDoctors] = useState([
-        { id: 1, name: 'Doctor 1', email: 'doctor1@example.com', age: 35, showDetails: false },
-        { id: 2, name: 'Doctor 2', email: 'doctor2@example.com', age: 40, showDetails: false },
-        { id: 3, name: 'Doctor 3', email: 'doctor3@example.com', age: 45, showDetails: false },
-        { id: 4, name: 'Doctor 4', email: 'doctor4@example.com', age: 50, showDetails: false }
+        { id: 1, name: 'Doctor 1', email: 'doctor1@example.com', phone: '123-456-7890', username: 'doctor1', age: 35, gender: 'Male', specialty: 'Cardiology', showDetails: false },
+        { id: 2, name: 'Doctor 2', email: 'doctor2@example.com', phone: '234-567-8901', username: 'doctor2', age: 40, gender: 'Female', specialty: 'Pediatrics', showDetails: false },
+        { id: 3, name: 'Doctor 3', email: 'doctor3@example.com', phone: '345-678-9012', username: 'doctor3', age: 45, gender: 'Male', specialty: 'Orthopedics', showDetails: false },
+        { id: 4, name: 'Doctor 4', email: 'doctor4@example.com', phone: '456-789-0123', username: 'doctor4', age: 50, gender: 'Female', specialty: 'Dermatology', showDetails: false }
     ]);
 
     const [patients, setPatients] = useState([
-        { id: 1, name: 'Patient 1', email: 'patient1@example.com', age: 25, showDetails: false },
-        { id: 2, name: 'Patient 2', email: 'patient2@example.com', age: 30, showDetails: false },
-        { id: 3, name: 'Patient 3', email: 'patient3@example.com', age: 35, showDetails: false },
-        { id: 4, name: 'Patient 4', email: 'patient4@example.com', age: 40, showDetails: false }
+        { id: 1, name: 'Patient 1', email: 'patient1@example.com', phone: '567-890-1234', username: 'patient1', age: 25, gender: 'Male', showDetails: false },
+        { id: 2, name: 'Patient 2', email: 'patient2@example.com', phone: '678-901-2345', username: 'patient2', age: 30, gender: 'Female', showDetails: false },
+        { id: 3, name: 'Patient 3', email: 'patient3@example.com', phone: '789-012-3456', username: 'patient3', age: 35, gender: 'Male', showDetails: false },
+        { id: 4, name: 'Patient 4', email: 'patient4@example.com', phone: '890-123-4567', username: 'patient4', age: 40, gender: 'Female', showDetails: false }
     ]);
 
     const [doctorFilter, setDoctorFilter] = useState('');
@@ -60,20 +60,35 @@ function EmployeeDashboard() {
             return doctor.name.toLowerCase().includes(doctorFilter.toLowerCase());
         } else if (doctorFilterBy === 'email') {
             return doctor.email.toLowerCase().includes(doctorFilter.toLowerCase());
+        } else if (doctorFilterBy === 'phone') {
+            return doctor.phone.toLowerCase().includes(doctorFilter.toLowerCase());
+        } else if (doctorFilterBy === 'username') {
+            return doctor.username.toLowerCase().includes(doctorFilter.toLowerCase());
         } else if (doctorFilterBy === 'age') {
             return doctor.age.toString().includes(doctorFilter);
+        } else if (doctorFilterBy === 'gender') {
+            return doctor.gender.toLowerCase() === doctorFilter.toLowerCase();
+        } else if (doctorFilterBy === 'specialty') {
+            return doctor.specialty.toLowerCase().includes(doctorFilter.toLowerCase());
         }
     });
-
+    
     const filteredPatients = patients.filter(patient => {
         if (patientFilterBy === 'name') {
             return patient.name.toLowerCase().includes(patientFilter.toLowerCase());
         } else if (patientFilterBy === 'email') {
             return patient.email.toLowerCase().includes(patientFilter.toLowerCase());
+        } else if (patientFilterBy === 'phone') {
+            return patient.phone.toLowerCase().includes(patientFilter.toLowerCase());
+        } else if (patientFilterBy === 'username') {
+            return patient.username.toLowerCase().includes(patientFilter.toLowerCase());
         } else if (patientFilterBy === 'age') {
             return patient.age.toString().includes(patientFilter);
+        } else if (patientFilterBy === 'gender') {
+            return patient.gender.toLowerCase() === patientFilter.toLowerCase();
         }
     });
+    
 
     const toggleDetails = (item) => {
         item.showDetails = !item.showDetails;
@@ -129,7 +144,11 @@ function EmployeeDashboard() {
                                 <select value={doctorFilterBy} onChange={handleDoctorFilterByChange} className="filter-select">
                                     <option value="name">Name</option>
                                     <option value="email">Email</option>
+                                    <option value="phone">Phone</option>
+                                    <option value="username">Username</option>
                                     <option value="age">Age</option>
+                                    <option value="gender">Gender</option>
+                                    <option value="specialty">Specialty</option>
                                 </select>
                             </div>
                             <input
@@ -154,7 +173,11 @@ function EmployeeDashboard() {
                                         {doctor.showDetails && (
                                             <div className="details">
                                                 <p>Email: {doctor.email}</p>
+                                                <p>Phone: {doctor.phone}</p>
+                                                <p>Username: {doctor.username}</p>
                                                 <p>Age: {doctor.age}</p>
+                                                <p>Gender: {doctor.gender}</p>
+                                                <p>Specialty: {doctor.specialty}</p>
                                             </div>
                                         )}
                                     </div>
@@ -179,7 +202,10 @@ function EmployeeDashboard() {
                             <select value={patientFilterBy} onChange={handlePatientFilterByChange} className="filter-select">
                                     <option value="name">Name</option>
                                     <option value="email">Email</option>
+                                    <option value="phone">Phone</option>
+                                    <option value="username">Username</option>
                                     <option value="age">Age</option>
+                                    <option value="gender">Gender</option>
                             </select>
                         </div>
                             <input
@@ -204,7 +230,10 @@ function EmployeeDashboard() {
                                         {patient.showDetails && (
                                             <div className="details">
                                                 <p>Email: {patient.email}</p>
+                                                <p>Phone: {patient.phone}</p>
+                                                <p>Username: {patient.username}</p>
                                                 <p>Age: {patient.age}</p>
+                                                <p>Gender: {patient.gender}</p>
                                             </div>
                                         )}
                                     </div>
