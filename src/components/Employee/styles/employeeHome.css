@@ -147,7 +147,8 @@
     font-size: 25px;
 }
 
-
-
-
-
+.doctor-list-container,
+.patient-list-container {
+  max-height: 500px;
+  overflow-y: auto;
+}
