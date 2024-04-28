@@ -2,10 +2,28 @@ import React, { useState } from 'react';
 import "./styles/employeeHome.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faEdit, faAngleDown, faAngleUp, faPlus } from '@fortawesome/free-solid-svg-icons';
+import AddDoctor from './AddDoctor';
+import AddPatient from './AddPatient';
+
 
 function EmployeeDashboard() {
-    const addNewDoctor = () => {
-        // Implementation of addNewDoctor function
+
+    const [showAddDoctorForm, setShowAddDoctorForm] = useState(false);
+    const [showAddPatientForm, setShowAddPatientForm] = useState(false);
+
+
+    const toggleAddDoctorForm = () => {
+        setShowAddDoctorForm(!showAddDoctorForm);
+    };
+
+    const toggleAddPatientForm = () => {
+        setShowAddPatientForm(!showAddPatientForm);
+    };
+
+
+    const addDoctor = (newDoctor) => {
+        setDoctors([...doctors, newDoctor]);
+        setShowAddDoctorForm(false);
     };
 
     const redirectToEditDoctorPage = () => {
@@ -24,7 +42,10 @@ function EmployeeDashboard() {
         { id: 1, name: 'Doctor 1', email: 'doctor1@example.com', phone: '123-456-7890', username: 'doctor1', age: 35, gender: 'Male', specialty: 'Cardiology', showDetails: false },
         { id: 2, name: 'Doctor 2', email: 'doctor2@example.com', phone: '234-567-8901', username: 'doctor2', age: 40, gender: 'Female', specialty: 'Pediatrics', showDetails: false },
         { id: 3, name: 'Doctor 3', email: 'doctor3@example.com', phone: '345-678-9012', username: 'doctor3', age: 45, gender: 'Male', specialty: 'Orthopedics', showDetails: false },
-        { id: 4, name: 'Doctor 4', email: 'doctor4@example.com', phone: '456-789-0123', username: 'doctor4', age: 50, gender: 'Female', specialty: 'Dermatology', showDetails: false }
+        { id: 4, name: 'Doctor 4', email: 'doctor4@example.com', phone: '456-789-0123', username: 'doctor4', age: 50, gender: 'Female', specialty: 'Dermatology', showDetails: false },
+        { id: 5, name: 'Doctor 5', email: 'doctor3@example.com', phone: '345-678-9012', username: 'doctor5', age: 45, gender: 'Male', specialty: 'Orthopedics', showDetails: false },
+        { id: 6, name: 'Doctor 6', email: 'doctor3@example.com', phone: '345-678-9012', username: 'doctor6', age: 45, gender: 'Male', specialty: 'Orthopedics', showDetails: false },
+        { id: 7, name: 'Doctor 7', email: 'doctor3@example.com', phone: '345-678-9012', username: 'doctor7', age: 45, gender: 'Male', specialty: 'Orthopedics', showDetails: false }
     ]);
 
     const [patients, setPatients] = useState([
@@ -134,7 +155,7 @@ function EmployeeDashboard() {
                     <div className="section">
                         <div className="title-container">
                             <h2>Doctors</h2>
-                            <div className="add-btn" onClick={addNewDoctor}>
+                            <div className="add-btn" onClick={toggleAddDoctorForm}>
                                 <FontAwesomeIcon icon={faPlus} className="add-icon" />
                             </div>
                         </div>
@@ -160,30 +181,33 @@ function EmployeeDashboard() {
                             />
                         </div>
 
-                        <ul className="doctor-list">
-                            {filteredDoctors.map(doctor => (
-                                <li key={doctor.id}>
-                                    <div className="item">
-                                        <FontAwesomeIcon style={{ marginRight: '20px' }} icon={doctor.showDetails ? faAngleUp : faAngleDown} className="toggle-icon" onClick={() => toggleDetails(doctor)} />
-                                        <span>{doctor.name}</span>
-                                        <div className="actions">
-                                            <FontAwesomeIcon style={{ marginRight: '30px' }} icon={faEdit} className="edit-icon" onClick={() => handleEditDoctor(doctor.id)} />
-                                            <FontAwesomeIcon icon={faTrashAlt} className="delete-icon" onClick={() => handleDeleteDoctor(doctor.id, doctor.name)} />
-                                        </div>
-                                        {doctor.showDetails && (
-                                            <div className="details">
-                                                <p>Email: {doctor.email}</p>
-                                                <p>Phone: {doctor.phone}</p>
-                                                <p>Username: {doctor.username}</p>
-                                                <p>Age: {doctor.age}</p>
-                                                <p>Gender: {doctor.gender}</p>
-                                                <p>Specialty: {doctor.specialty}</p>
+
+                        <div className="doctor-list-container">
+                            <ul className="doctor-list">
+                                {filteredDoctors.map(doctor => (
+                                    <li key={doctor.id}>
+                                        <div className="item">
+                                            <FontAwesomeIcon style={{ marginRight: '20px' }} icon={doctor.showDetails ? faAngleUp : faAngleDown} className="toggle-icon" onClick={() => toggleDetails(doctor)} />
+                                            <span>{doctor.name}</span>
+                                            <div className="actions">
+                                                <FontAwesomeIcon style={{ marginRight: '30px' }} icon={faEdit} className="edit-icon" onClick={() => handleEditDoctor(doctor.id)} />
+                                                <FontAwesomeIcon icon={faTrashAlt} className="delete-icon" onClick={() => handleDeleteDoctor(doctor.id, doctor.name)} />
                                             </div>
-                                        )}
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
+                                            {doctor.showDetails && (
+                                                <div className="details">
+                                                    <p>Email: {doctor.email}</p>
+                                                    <p>Phone: {doctor.phone}</p>
+                                                    <p>Username: {doctor.username}</p>
+                                                    <p>Age: {doctor.age}</p>
+                                                    <p>Gender: {doctor.gender}</p>
+                                                    <p>Specialty: {doctor.specialty}</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
                 </div>
 
@@ -191,7 +215,7 @@ function EmployeeDashboard() {
                     <div className="section">
                         <div className="title-container">
                             <h2>Patients</h2>
-                            <div className="add-btn" onClick={addNewPatient}>
+                            <div className="add-btn" onClick={toggleAddPatientForm}>
                                 <FontAwesomeIcon icon={faPlus} className="add-icon" />
                             </div>
                         </div>
@@ -216,35 +240,45 @@ function EmployeeDashboard() {
                                 className="filter-input"
                             />
                         </div>
+                        
 
-                        <ul className="patient-list">
-                            {filteredPatients.map(patient => (
-                                <li key={patient.id}>
-                                    <div className="item">
-                                        <FontAwesomeIcon style={{ marginRight: '20px' }} icon={patient.showDetails ? faAngleUp : faAngleDown} className="toggle-icon" onClick={() => toggleDetails(patient)} />
-                                        <span>{patient.name}</span>
-                                        <div className="actions">
-                                            <FontAwesomeIcon style={{ marginRight: '30px' }} icon={faEdit} className="edit-icon" onClick={() => handleEditPatient(patient.id)} />
-                                            <FontAwesomeIcon icon={faTrashAlt} className="delete-icon" onClick={() => handleDeletePatient(patient.id, patient.name)} />
-                                        </div>
-                                        {patient.showDetails && (
-                                            <div className="details">
-                                                <p>Email: {patient.email}</p>
-                                                <p>Phone: {patient.phone}</p>
-                                                <p>Username: {patient.username}</p>
-                                                <p>Age: {patient.age}</p>
-                                                <p>Gender: {patient.gender}</p>
+
+                        <div className="patient-list-container">
+                            <ul className="patient-list">
+                                {filteredPatients.map(patient => (
+                                    <li key={patient.id}>
+                                        <div className="item">
+                                            <FontAwesomeIcon style={{ marginRight: '20px' }} icon={patient.showDetails ? faAngleUp : faAngleDown} className="toggle-icon" onClick={() => toggleDetails(patient)} />
+                                            <span>{patient.name}</span>
+                                            <div className="actions">
+                                                <FontAwesomeIcon style={{ marginRight: '30px' }} icon={faEdit} className="edit-icon" onClick={() => handleEditPatient(patient.id)} />
+                                                <FontAwesomeIcon icon={faTrashAlt} className="delete-icon" onClick={() => handleDeletePatient(patient.id, patient.name)} />
                                             </div>
-                                        )}
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
+                                            {patient.showDetails && (
+                                                <div className="details">
+                                                    <p>Email: {patient.email}</p>
+                                                    <p>Phone: {patient.phone}</p>
+                                                    <p>Username: {patient.username}</p>
+                                                    <p>Age: {patient.age}</p>
+                                                    <p>Gender: {patient.gender}</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
                 </div>
+            
             </div>
+            
+            
+            <AddDoctor handleClose={toggleAddDoctorForm} show={showAddDoctorForm} addDoctor={addDoctor} />
+            
+            <AddPatient handleClose={toggleAddPatientForm} show={showAddPatientForm} />
+        
         </div>
     )
 }
-
 export default EmployeeDashboard;
