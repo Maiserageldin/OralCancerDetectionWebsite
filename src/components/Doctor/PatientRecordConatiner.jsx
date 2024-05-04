@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import "./styles/PatientRecordContainer.css";
-import stainedimg from "./img/stainedimg.jpeg";
-import microscopicimg from "./img/microscpicimg.jpeg";
+import stainedimg from "./imgs/stainedimg.jpeg";
+import microscopicimg from "./imgs/microscpicimg.jpeg";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faEdit, faAngleDown, faAngleUp, faPlus } from '@fortawesome/free-solid-svg-icons';
 
@@ -21,7 +21,7 @@ function PatientRecordContainer() {
   useEffect(() => {
     document.addEventListener('fullscreenchange', handleFullScreenChange);
     return () => {
-      document.removeEventListener('fullscreenchange', handleFullScreenChange);
+       document.removeEventListener('fullscreenchange', handleFullScreenChange);
     };
   }, []);
 

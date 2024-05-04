@@ -68,7 +68,7 @@ function VisitDetails() {
                     <button>Save Comment</button>
                 </div>
             </div>
-            <Footer />
+            < Footer />
         </>
     );
 }

@@ -15,7 +15,7 @@ function PatientVisits({ patient }) {
   ]);
 
   const toggleDetails = (visitId) => {
-    setVisits(visits.map((visit) =>
+     setVisits(visits.map((visit) =>
       visit.id === visitId ? { ...visit, showDetails: !visit.showDetails } : visit
     ));
   };

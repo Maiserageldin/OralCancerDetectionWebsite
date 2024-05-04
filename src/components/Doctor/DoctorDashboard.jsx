@@ -94,7 +94,7 @@ function Doctordashboard1() {
                         </div>
 
                         <ul className="patient-list">
-    {filteredPatients.map(patient => (
+     {filteredPatients.map(patient => (
         <li key={patient.id} >
             <div className="item">
                 <div className="row"> 

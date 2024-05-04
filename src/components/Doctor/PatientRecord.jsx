@@ -11,7 +11,7 @@ function PatientRecord(){
       <Header />
       <PatientRecordConatiner/>
       <Footer/>
-    </div> 
+     </div> 
   );
 }
 
