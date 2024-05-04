@@ -4,11 +4,17 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "./fontAwesome";
+import DoctorDashboard from "./components/Doctor/DoctorDashboard";
+import EmployeeDashboard from "./components/Employee/EmployeeDashboard";
+import PatientVisits from "./components/Doctor/PatientVisit";
+import VisitDetails from "./components/Doctor/VisitDetails";
+import PatientRecord from "./components/Doctor/PatientRecord";
+
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    < PatientVisits/>
   </React.StrictMode>
 );
 

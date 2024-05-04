@@ -1,0 +1,71 @@
+.page-container{
+    margin: 20px;
+}
+.Container {
+    padding: 20px;
+   
+  }
+  span{
+    font-weight: bold;
+  }
+  
+  .VisitList {
+    list-style: none;
+    padding: 20px;
+    background-color: #f2e4fd;
+    border-radius: 10px;
+    width: 70%;
+    min-height: calc(100vh - 160px);
+  }
+  .VisitList li{
+    border-bottom: 1px solid #ccc;
+    margin-top: 10px;
+    background-color: white;
+    border-color: #a46ede;
+    border-radius: 10px;
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .VisitItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .VisitDate {
+    font-weight: bold;
+  }
+  
+  .ViewButton {
+    background-color: #a46ede;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  
+  .ViewButton:hover {
+    background-color: #fff;
+    color: #a46ede;
+  }
+  
+  .VisitDetails {
+    margin-top: 5px;
+    padding-left: 20px;
+    border-left: 2px solid #a46ede;
+  }
+  
+  h2{
+    font-weight: bold;
+    font-size: large;
+  }
+  .row{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
