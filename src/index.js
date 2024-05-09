@@ -4,26 +4,22 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "./fontAwesome";
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
-
-
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { AccessTokenProvider } from "./components/AccessTokenContext.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App/>,
+    element: <App />,
   },
 ]);
-
-
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <RouterProvider router = {router}/>
+    <AccessTokenProvider>
+      <App />
+    </AccessTokenProvider>
   </React.StrictMode>
 );
 

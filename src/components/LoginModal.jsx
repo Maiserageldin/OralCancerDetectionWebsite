@@ -1,9 +1,79 @@
-import React from "react";
+import axios from "axios";
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import { AccessTokenContext } from "./AccessTokenContext.jsx";
 
 const LoginModal = ({ handleClose, show }) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const { setAccessToken } = useContext(AccessTokenContext);
+  // const [accessToken, setAccessToken] = useState(null);
+
+  const [error, setError] = useState(null);
   const showHideClass = show
     ? "modal fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
     : "modal hidden";
+  const navigate = useNavigate();
+
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value); // Update the username state variable with user input
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value); // Update the username state variable with user input
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    console.log("username: ", username);
+    console.log("password: ", password);
+    try {
+      const response = await axios.post(
+        "https://clinicmanagement20240427220332.azurewebsites.net/api/Authentication/Login",
+        {
+          userName: username,
+          password: password,
+        }
+      );
+      console.log("Login Successfull!", response.data);
+      navigate("/employee");
+      const accessToken = response.data?.accessToken;
+      setAccessToken(response.data?.accessToken);
+      handleClose();
+      const decodedData = jwtDecode(accessToken);
+      console.log("decodedData", decodedData);
+      const roles =
+        decodedData?.[
+          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+        ];
+
+      //console.log("accessToken", response.data?.accessToken);
+      console.log("roles", roles);
+
+      // Navigate to patient dashboard
+      // if (roles?.includes("Patient")) {
+      //   // history.push("/patient");
+      //   navigate("/patient");
+      // }
+      // // Navigate to doctor dashboard
+      // else if (roles?.includes("Doctor")) {
+      //   // history.push("/doctor");
+      //   navigate("/doctor");
+      // }
+      // //  Navigate to employee dashboard
+      // else if (roles?.includes("Employee")) {
+      //   // history.push("/employee");
+      //   navigate("/employee");
+      // }
+      // // Handle unexpected role scenario
+      // else {
+      //   console.log("Unexpected role");
+      // }
+    } catch (error) {
+      console.error("Login Error:", error.response?.data || error.message);
+    }
+  };
 
   return (
     <div className={showHideClass}>
@@ -29,7 +99,7 @@ const LoginModal = ({ handleClose, show }) => {
             </svg>
           </button>
           <h2 className="text-3xl font-bold mb-4">Login</h2>
-          <form>
+          <form onSubmit={handleLogin}>
             <div className="mb-4">
               <label
                 htmlFor="username"
@@ -38,9 +108,11 @@ const LoginModal = ({ handleClose, show }) => {
                 Username
               </label>
               <input
+                name="username"
                 id="username"
                 type="text"
                 placeholder="Enter your username"
+                onChange={handleUsernameChange}
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-400"
               />
             </div>
@@ -52,16 +124,15 @@ const LoginModal = ({ handleClose, show }) => {
                 Password
               </label>
               <input
+                name="password"
                 id="password"
                 type="password"
+                onChange={handlePasswordChange}
                 placeholder="Enter your password"
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-400"
               />
             </div>
-            <button
-              type="submit"
-              className="bg-purple-500 text-white px-6 py-3 rounded-lg hover:bg-purple-600"
-            >
+            <button className="bg-purple-500 text-white px-6 py-3 rounded-lg hover:bg-purple-600">
               Login
             </button>
           </form>
@@ -70,5 +141,4 @@ const LoginModal = ({ handleClose, show }) => {
     </div>
   );
 };
-
 export default LoginModal;

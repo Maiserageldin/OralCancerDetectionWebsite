@@ -2,27 +2,39 @@ import BlockContainer from "./components/Container";
 import Layout from "./components/Layout";
 import Header from "./components/Header";
 import Reviews from "./components/Reviews";
-import "./fontAwesome";
 import Footer from "./components/Footer";
-import { ParallaxProvider, Parallax } from "react-scroll-parallax";
 import EmployeeDashboard from "./components/Employee/EmployeeDashboard";
+import PatientDashboard from "./components/Patient/PatientDashboard";
+import DoctorDashboard from "./components/Doctor/DoctorDashboard";
+import "./fontAwesome";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useHistory,
+} from "react-router-dom";
+
+function MainLayout() {
+  return (
+    <Layout>
+      <Header />
+      <BlockContainer />
+      <Reviews />
+      <Footer />
+    </Layout>
+  );
+}
 
 function App() {
   return (
-    <ParallaxProvider>
-      <Layout>
-        <Header />
-        <Parallax y={[-20, 20]} tagOuter="figure">
-          <BlockContainer />
-        </Parallax>
-        <Parallax y={[-20, 20]} tagOuter="figure">
-          <Reviews />
-        </Parallax>
-        <Parallax y={[-20, 20]} tagOuter="figure">
-          <Footer />
-        </Parallax>
-      </Layout>
-    </ParallaxProvider>
+    <Router>
+      <Routes>
+        <Route path="/" element={<MainLayout />} />
+        <Route path="/patient" element={<PatientDashboard />} />
+        <Route path="/doctor" element={<DoctorDashboard />} />
+        <Route path="/employee" element={<EmployeeDashboard />} />
+      </Routes>
+    </Router>
   );
 }
 

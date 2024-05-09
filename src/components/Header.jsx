@@ -23,9 +23,7 @@ export default function Header() {
           <a href="#">About</a>
         </li>
         <li className="text-black hover:text-purple-400 text-xl font-bold font-josefin-sans">
-          <a href="#" onClick={openModal}>
-            Login
-          </a>
+          <a onClick={openModal}>Login</a>
         </li>
         <li>
           <button className="bg-purple-600 text-white rounded-full px-6 py-3 font-semibold hover:bg-purple-700 transition duration-300 shadow-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
