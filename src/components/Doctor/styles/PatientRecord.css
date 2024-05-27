@@ -1,0 +1,16 @@
+* {
+    box-sizing: border-box;
+  }
+  
+.Container{
+    background-color: white;
+    width: 100%;
+    max-width: 100%; /* Ensure the container doesn't exceed the viewport width */
+    padding: 0; /* Remove any padding */
+    margin: 0; /* Remove any margin */
+    box-sizing: border-box;
+} 
+
+
+
+

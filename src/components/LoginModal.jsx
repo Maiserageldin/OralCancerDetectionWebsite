@@ -37,7 +37,14 @@ const LoginModal = ({ handleClose, show }) => {
         }
       );
       console.log("Login Successfull!", response.data);
-      navigate("/employee");
+      if (username.startsWith("p_")) {
+        navigate("/patient");
+      } else if (username.startsWith("d_")) {
+        navigate("/doctor");
+      } else {
+        navigate("/employee");
+      }
+
       const accessToken = response.data?.accessToken;
       setAccessToken(response.data?.accessToken);
       handleClose();

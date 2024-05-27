@@ -1,0 +1,182 @@
+
+
+*{
+    box-sizing: border-box;
+  }
+.option {
+    cursor: pointer;
+    padding-left: 20px;
+    padding-right: 20px;
+    align-self: center;
+    color: white;
+    font-size: medium;
+}
+
+
+.content {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px auto;
+    min-height: calc(100vh - 160px);
+    width: 80%;
+}
+
+.column {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.title-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+
+.section {
+    /* background-color: #e9e9e9; */
+    background-color: #f2e4fd;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    height: 95%;
+}
+
+.section h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.add-btn {
+    background-color: #a46ede;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.filter-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.filter-left-container {
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    width: 50%;
+}
+
+.filter-input{
+    width: 100%;
+}
+.filter-select{
+    width: 60%;
+}
+
+
+.filter-input,
+.filter-select {
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.section h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.patient-list, .doctor-list {
+    list-style-type: none;
+}
+
+.patient-list li, .doctor-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    height: fit-content;
+}
+
+.item {
+    position: relative;
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    width: 100%;
+    border-color: #a46ede;
+    border-width: 2px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between; /* Distribute items along the row */
+    align-items: center; /* Center the content vertically */
+}
+
+
+.row > * {
+    margin: 0 5px; /* Add margin between items */
+}
+
+
+.actions {
+    position: absolute;
+    padding: 10px;
+    top: 0;
+    right: 0;
+}
+
+
+.details {
+    position: relative;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+}
+
+.add-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #a46ede;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.add-btn:hover {
+    background-color:blueviolet;
+}
+
+.add-btn .add-icon {
+    font-size: 25px;
+}
+button{
+    padding: 10px;
+}
+.view-button{
+   width: 80px;
+   height: 30px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   box-sizing: border-box;
+
+}
+
+
+
+
