@@ -2,76 +2,140 @@ import React, { useContext, useState } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { AccessTokenContext } from "../AccessTokenContext.jsx";
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const AddDoctor = ({ handleClose, show, addDoctor }) => {
   const { accessToken } = useContext(AccessTokenContext);
-  console.log("Access Token1 is: ", accessToken);
+  // console.log("Access Token from AddDoctor is: ", accessToken);
   const [doctorInfo, setDoctorInfo] = useState({
     name: "",
     email: "",
     phone: "",
     username: "",
-    age: "",
-    gender: "male",
-    specialty: "prosthodontist",
+    password: "",
+    age: '',
+    gender: '0',
+    specialty: '0',
   });
 
   //console.log("accessToken 1", accessToken);
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setDoctorInfo({ ...doctorInfo, [name]: value });
+    const parsedValue = name === 'gender' || name === 'specialty' || name === 'age' ? parseInt(value) : value;
+    setDoctorInfo({ ...doctorInfo, [name]: parsedValue });
+  };
+
+  const togglePasswordVisibility = () => {
+    setDoctorInfo({ ...doctorInfo, showPassword: !doctorInfo.showPassword });
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    addDoctor(doctorInfo);
-    setDoctorInfo({
-      name: "",
-      email: "",
-      phone: "",
-      username: "",
-      age: "",
-      gender: "male",
-      specialty: "prosthodontist",
-    });
 
-    try {
-      console.log("Access Token is: ", accessToken);
-      const response = await axios.post(
-        "https://clinicmanagement20240427220332.azurewebsites.net/api/Authentication/RegisterDoctor",
-        {
-          fullName: doctorInfo.name,
-          userName: doctorInfo.username,
-          age: parseInt(doctorInfo.age),
-          email: doctorInfo.email,
-          password: "4111999ASU_h",
-          phoneNumber: doctorInfo.phone,
-          gender: 0,
-          speciality: 0,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
+    // Validation checks
+    if (!doctorInfo.name.match(/^[a-zA-Z\s]+$/)) {
+      alert("Name field should contain only letters and spaces.");
+      return;
+  }
 
-      console.log("Doctor Added Successfull!", response.data);
-    } catch (error) {
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        console.error("Doctor Add Error:", error.response.data);
-        console.error("Status:", error.response.status);
-        console.error("Validation Errors:", error.response.data.errors);
-      } else if (error.request) {
-        // The request was made but no response was received
-        console.error("Network Error:", error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        console.error("Error:", error.message);
-      }
+    if (!doctorInfo.phone.match(/^\d{11}$/)) {
+        alert("Phone number field should contain exactly 11 numbers.");
+        return;
     }
+
+    if (!doctorInfo.email.match(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/)) {
+        alert("Email field should contain a valid email address.");
+        return;
+    }
+
+    if (doctorInfo.password.length < 6 || !doctorInfo.password.match(/[a-z]/) || !doctorInfo.password.match(/[A-Z]/) || !doctorInfo.password.match(/\d/) || !doctorInfo.password.match(/\W/)) {
+        alert("Password should be at least 6 characters long and contain at least one lowercase letter, one uppercase letter, a hyphen (-) and numbers.");
+        return;
+    }
+
+
+    if (
+      doctorInfo.name &&
+      doctorInfo.email &&
+      doctorInfo.phone &&
+      doctorInfo.username &&
+      doctorInfo.password &&
+      doctorInfo.age &&
+      doctorInfo.gender &&
+      doctorInfo.specialty
+    ) {
+      if (doctorInfo.username.startsWith("d_")) {
+        addDoctor(doctorInfo);
+        setDoctorInfo({
+          name: "",
+          email: "",
+          phone: "",
+          username: "",
+          password: "",
+          age: '',
+          gender: '0',
+          specialty: '0'
+        });
+
+        try {
+          console.log("Access Token is: ", accessToken);
+
+          // let ageGroup;
+          // const doctorAge = parseInt(doctorInfo.age);
+          // if (doctorAge >= 0 && doctorAge <= 40) {
+          //   ageGroup = 0;
+          // } else if (doctorAge >= 41 && doctorAge <= 60) {
+          //   ageGroup = 1;
+          // } else {
+          //   ageGroup = 2;
+          // }
+
+          const response = await axios.post(
+            "https://clinicmanagement20240427220332.azurewebsites.net/api/Authentication/RegisterDoctor",
+            {
+              fullName: doctorInfo.name,
+              userName: doctorInfo.username,
+              age: doctorInfo.age,
+              email: doctorInfo.email,
+              password: doctorInfo.password,
+              phoneNumber: doctorInfo.phone,
+              gender: parseInt(doctorInfo.gender),
+              speciality: parseInt(doctorInfo.specialty),
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+    
+          console.log("Doctor Added Successfully!", response.data);
+        } catch (error) {
+          if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.error("Doctor Add Error:", error.response.data);
+            console.error("Status:", error.response.status);
+            console.error("Validation Errors:", error.response.data.errors);
+          } else if (error.request) {
+            // The request was made but no response was received
+            console.error("Network Error:", error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.error("Error:", error.message);
+          }
+        }
+
+
+      } else {
+        alert("Username must start with 'd_'");
+      }
+    } else {
+      alert("Please fill in all fields");
+    }
+
+    
   };
 
   const showHideClass = show
@@ -85,11 +149,11 @@ const AddDoctor = ({ handleClose, show, addDoctor }) => {
         <div className="modal-content bg-white rounded-lg p-5 w-full max-w-xl">
           {/* Form */}
           <form
-            className="grid grid-cols-1 md:grid-cols-2 gap-8"
+            className="grid grid-cols-2 gap-8"
             onSubmit={handleSubmit}
           >
-            {/* Full Name */}
-            <div className="mb-4 col-span-2 text-center">
+             {/* Full Name */}
+            <div className="mb-4">
               <label
                 htmlFor="name"
                 className="block text-gray-700 font-bold mb-2"
@@ -103,24 +167,6 @@ const AddDoctor = ({ handleClose, show, addDoctor }) => {
                 value={doctorInfo.name}
                 onChange={handleInputChange}
                 placeholder="Enter doctor's full name"
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-400"
-              />
-            </div>
-            {/* Email */}
-            <div className="mb-4">
-              <label
-                htmlFor="email"
-                className="block text-gray-700 font-bold mb-2"
-              >
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                name="email"
-                value={doctorInfo.email}
-                onChange={handleInputChange}
-                placeholder="Enter doctor's email"
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-400"
               />
             </div>
@@ -142,21 +188,21 @@ const AddDoctor = ({ handleClose, show, addDoctor }) => {
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-400"
               />
             </div>
-            {/* Username */}
+            {/* Email */}
             <div className="mb-4">
               <label
-                htmlFor="username"
+                htmlFor="email"
                 className="block text-gray-700 font-bold mb-2"
               >
-                Username
+                Email
               </label>
               <input
-                id="username"
-                type="text"
-                name="username"
-                value={doctorInfo.username}
+                id="email"
+                type="email"
+                name="email"
+                value={doctorInfo.email}
                 onChange={handleInputChange}
-                placeholder="Enter doctor's username"
+                placeholder="Enter doctor's email"
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-400"
               />
             </div>
@@ -178,6 +224,26 @@ const AddDoctor = ({ handleClose, show, addDoctor }) => {
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-400"
               />
             </div>
+            {/* Username */}
+            <div className="mb-4">
+              <label
+                htmlFor="username"
+                className="block text-gray-700 font-bold mb-2"
+              >
+                Username
+                <span className="text-xs text-gray-500 ml-1">(start with "d_")</span>
+              </label>
+              <input
+                id="username"
+                type="text"
+                name="username"
+                value={doctorInfo.username}
+                onChange={handleInputChange}
+                placeholder="Enter doctor's username"
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-400"
+              />
+            </div>
+            
             {/* Gender */}
             <div className="mb-4">
               <label
@@ -193,11 +259,38 @@ const AddDoctor = ({ handleClose, show, addDoctor }) => {
                 onChange={handleInputChange}
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-400"
               >
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
+                <option value='0'>Female</option>
+                <option value='1'>Male</option>
+                <option value='2'>Other</option>
               </select>
             </div>
+
+            {/* Password */}
+            <div className="relative">
+                <label
+                  htmlFor="password"
+                  className="block text-gray-700 font-bold mb-2"
+                >
+                  Password
+                </label>
+                <input
+                  id="password"
+                  type={doctorInfo.showPassword ? "text" : "password"}
+                  name="password"
+                  value={doctorInfo.password}
+                  onChange={handleInputChange}
+                  placeholder="Enter doctor's password"
+                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-400"
+                />
+
+
+                  <span
+                    className="absolute right-2 top-2 cursor-pointer"
+                    onClick={togglePasswordVisibility}
+                  >
+                    {doctorInfo.showPassword ? <FontAwesomeIcon icon={faEye} /> : <FontAwesomeIcon icon={faEyeSlash} />}
+                  </span>
+              </div>
             {/* Specialty */}
             <div className="mb-4">
               <label
@@ -213,13 +306,11 @@ const AddDoctor = ({ handleClose, show, addDoctor }) => {
                 onChange={handleInputChange}
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-400"
               >
-                <option value="prosthodontist">Prosthodontist</option>
-                <option value="oral_pathologist">Oral Pathologist</option>
-                <option value="oncologic_dentist">Oncologic Dentist</option>
-                <option value="oral_medicine_specialist">
-                  Oral Medicine Specialist
-                </option>
-                <option value="oms">Oral and Maxillofacial Surgeon</option>
+                
+                <option value='0'>Oral and Maxillofacial Surgeon</option>
+                <option value='1'>Prosthodontist</option>
+                <option value='2'>Oral Pathologist</option>
+                <option value='3'>Oral Medicine Specialist</option>
               </select>
             </div>
             {/* Submit button */}
