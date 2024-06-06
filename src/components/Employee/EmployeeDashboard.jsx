@@ -264,7 +264,7 @@ function EmployeeDashboard() {
   };
 
   return (
-    <div>
+    <div className="employee-dashboard">
       <div className="content">
         <div className="column">
           <div className="section">

@@ -5,6 +5,7 @@ import { AccessTokenContext } from "../AccessTokenContext.jsx";
 
 const AddDoctor = ({ handleClose, show, addDoctor }) => {
   const { accessToken } = useContext(AccessTokenContext);
+
   console.log("Access Token1 is: ", accessToken);
   const [doctorInfo, setDoctorInfo] = useState({
     name: "",

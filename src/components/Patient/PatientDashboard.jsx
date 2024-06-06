@@ -1,64 +1,73 @@
-import React, { useState } from 'react';
-import Footer from '../Footer';
-import Header from '../Header';
-import './styles/PatientDashboard.css'; 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashAlt, faEdit, faAngleDown, faAngleUp, faPlus } from '@fortawesome/free-solid-svg-icons';
-
+import React, { useState } from "react";
+import Footer from "../Footer";
+import Header from "../Header";
+import "./styles/PatientDashboard.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faTrashAlt,
+  faEdit,
+  faAngleDown,
+  faAngleUp,
+  faPlus,
+} from "@fortawesome/free-solid-svg-icons";
 
 function PatientVisits({ patient }) {
   const [visits, setVisits] = useState([
     // Example visits data
-    { id: 1, date: '2022-04-01', details: 'Visit details 1' },
-    { id: 2, date: '2022-04-15', details: 'Visit details 2' },
-    { id: 3, date: '2022-05-03', details: 'Visit details 3' },
+    { id: 1, date: "2022-04-01", details: "Visit details 1" },
+    { id: 2, date: "2022-04-15", details: "Visit details 2" },
+    { id: 3, date: "2022-05-03", details: "Visit details 3" },
   ]);
 
   const toggleDetails = (visitId) => {
-     setVisits(visits.map((visit) =>
-      visit.id === visitId ? { ...visit, showDetails: !visit.showDetails } : visit
-    ));
+    setVisits(
+      visits.map((visit) =>
+        visit.id === visitId
+          ? { ...visit, showDetails: !visit.showDetails }
+          : visit
+      )
+    );
   };
-  
-  
-  return (
-    <div>
-        <Header/>
-        <div className="content">
-            <div className="column">
-                <div className="section">
-                    <div className="title-container">
-                        <h2>My Visits</h2>
-                    </div>
 
-                   <ul className="patient-list">
-                   {visits.map(visit => (
-                    <li key={visit.id}>
-                     <div className="item">
-                     
-                    <FontAwesomeIcon icon={visit.showDetails ? faAngleUp : faAngleDown} className="toggle-icon" onClick={() => toggleDetails(visit.id)} />
-                    <div className="row"> 
-                    <span>{visit.id}</span>
-                    <span>{visit.date}</span>
-                  
-                </div>
-               { visit.showDetails && (
-                    <div className="details">
-                        <p>details: {visit.details}</p>
-                        </div>
-                )}
-                     </div>
-                     
-                   </li>
-           ))}
-                  </ul>
-                </div>
+  return (
+    <div className="patient-dashboard">
+      <Header />
+      <div className="content">
+        <div className="column">
+          <div className="section">
+            <div className="title-container">
+              <h2>My Visits</h2>
             </div>
-       
+
+            <ul className="patient-list">
+              {visits.map((visit) => (
+                <li key={visit.id}>
+                  <div className="item">
+                    <FontAwesomeIcon
+                      icon={visit.showDetails ? faAngleUp : faAngleDown}
+                      className="toggle-icon"
+                      onClick={() => toggleDetails(visit.id)}
+                    />
+                    <div className="row">
+                      <span>{visit.id}</span>
+                      <span>{visit.date}</span>
+                    </div>
+                    {visit.showDetails && (
+                      <div className="details">
+                        <p>details: {visit.details}</p>
+                      </div>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-     <Footer/></div>
-)
- /* return (
+      </div>
+      <Footer />
+    </div>
+  );
+  /* return (
     <div className='page-container'> 
       <Header />
       <div className="Container">

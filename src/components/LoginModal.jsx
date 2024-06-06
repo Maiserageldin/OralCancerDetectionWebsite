@@ -8,6 +8,7 @@ const LoginModal = ({ handleClose, show }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const { setAccessToken } = useContext(AccessTokenContext);
+  const { setDoctorId } = useContext(AccessTokenContext);
   // const [accessToken, setAccessToken] = useState(null);
 
   const [error, setError] = useState(null);
@@ -37,16 +38,15 @@ const LoginModal = ({ handleClose, show }) => {
         }
       );
       console.log("Login Successfull!", response.data);
-      if (username.startsWith("p_")) {
-        navigate("/patient");
-      } else if (username.startsWith("d_")) {
-        navigate("/doctor");
-      } else {
-        navigate("/employee");
-      }
 
-      const accessToken = response.data?.accessToken;
-      setAccessToken(response.data?.accessToken);
+      //const { accessToken } = response.data;
+      const { accessToken, id } = response.data;
+      setAccessToken(accessToken);
+      setDoctorId(id);
+
+      //console.log("id", id);
+      console.log("Access Token", accessToken);
+
       handleClose();
       const decodedData = jwtDecode(accessToken);
       console.log("decodedData", decodedData);
@@ -54,10 +54,21 @@ const LoginModal = ({ handleClose, show }) => {
         decodedData?.[
           "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
         ];
-
+      const usernameResponse =
+        decodedData?.[
+          "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
+        ];
       //console.log("accessToken", response.data?.accessToken);
       console.log("roles", roles);
+      console.log("username retrieved", usernameResponse);
 
+      if (username.startsWith("p_")) {
+        navigate("/patient", { state: { usernameResponse } });
+      } else if (username.startsWith("d_")) {
+        navigate("/doctor", { state: { usernameResponse } });
+      } else {
+        navigate("/employee", { state: { usernameResponse } });
+      }
       // Navigate to patient dashboard
       // if (roles?.includes("Patient")) {
       //   // history.push("/patient");
