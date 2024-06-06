@@ -609,7 +609,7 @@ function EmployeeDashboard() {
   // };
 
   return (
-    <div>
+    <div className="employee-dashboard">
       <div className="register-button-container">
         <button className="register-button" onClick={toggleAddEmployeeForm}>
           Register an Employee
