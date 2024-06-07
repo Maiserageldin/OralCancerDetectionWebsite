@@ -9,12 +9,9 @@ const LoginModal = ({ handleClose, show }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const { setAccessToken } = useContext(AccessTokenContext);
-<<<<<<< HEAD
   const { setDoctorId } = useContext(AccessTokenContext);
   // const [accessToken, setAccessToken] = useState(null);
 
-=======
->>>>>>> 279aed1fd52f40085a7e890028116990f01bdf3b
   const [error, setError] = useState(null);
   const showHideClass = show
     ? "modal fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
@@ -41,7 +38,6 @@ const LoginModal = ({ handleClose, show }) => {
           password: password,
         }
       );
-<<<<<<< HEAD
       console.log("Login Successfull!", response.data);
 
       //const { accessToken } = response.data;
@@ -56,19 +52,10 @@ const LoginModal = ({ handleClose, show }) => {
       handleClose();
       const decodedData = jwtDecode(accessToken);
       console.log("decodedData", decodedData);
-=======
-
-      const { accessToken, id } = response.data;
-      setAccessToken(accessToken);
-      localStorage.setItem("userId", id); // Store the id in localStorage
-
-      const decodedData = jwtDecode(accessToken);
->>>>>>> 279aed1fd52f40085a7e890028116990f01bdf3b
       const roles =
         decodedData?.[
           "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
         ];
-<<<<<<< HEAD
       const usernameResponse =
         decodedData?.[
           "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
@@ -103,20 +90,6 @@ const LoginModal = ({ handleClose, show }) => {
       // else {
       //   console.log("Unexpected role");
       // }
-=======
-        console.log("Login Successfull!", response.data);
-        console.log("user id:",id);
-
-      if (username.startsWith("p_")) {
-        navigate("/patient");
-      } else if (username.startsWith("d_")) {
-        navigate("/doctor");
-      } else {
-        navigate("/employee");
-      }
-      console.log("roles", roles);
-      handleClose();
->>>>>>> 279aed1fd52f40085a7e890028116990f01bdf3b
     } catch (error) {
       console.error("Login Error:", error.response?.data || error.message);
       setError(error.response?.data || error.message);
