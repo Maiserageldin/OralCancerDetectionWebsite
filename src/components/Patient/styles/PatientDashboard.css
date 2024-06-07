@@ -1,14 +1,56 @@
-.patient-dashboard .page-container {
+.page-container {
   margin: 20px;
 }
-.patient-dashboard .Container {
+.Container {
   padding: 20px;
 }
-.patient-dashboard span {
+.content {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px;
+  min-height: calc(100vh - 160px);
+}
+
+.column {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.patient-list {
+  list-style-type: none;
+}
+
+.patient-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.section {
+  /* background-color: #e9e9e9; */
+  background-color: #f2e4fd;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  height: 95%;
+}
+
+.section h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+span {
   font-weight: bold;
 }
 
-.patient-dashboard .VisitList {
+.VisitList {
   list-style: none;
   padding: 20px;
   background-color: #f2e4fd;
@@ -16,7 +58,7 @@
   width: 70%;
   min-height: calc(100vh - 160px);
 }
-.patient-dashboard .VisitList li {
+.VisitList li {
   border-bottom: 1px solid #ccc;
   margin-top: 10px;
   background-color: white;
@@ -27,18 +69,18 @@
   justify-content: space-between;
 }
 
-.patient-dashboard .VisitItem {
+.VisitItem {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
 }
 
-.patient-dashboard .VisitDate {
+.VisitDate {
   font-weight: bold;
 }
 
-.patient-dashboard .ViewButton {
+.ViewButton {
   background-color: #a46ede;
   color: #fff;
   padding: 8px 16px;
@@ -47,24 +89,37 @@
   cursor: pointer;
 }
 
-.patient-dashboard .ViewButton:hover {
+.ViewButton:hover {
   background-color: #fff;
   color: #a46ede;
 }
 
-.patient-dashboard .VisitDetails {
+.VisitDetails {
   margin-top: 5px;
   padding-left: 20px;
   border-left: 2px solid #a46ede;
 }
 
-.patient-dashboard h2 {
+h2 {
   font-weight: bold;
   font-size: large;
 }
-.patient-dashboard .row {
+.row {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+.item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+  width: 100%;
+  border-color: #a46ede;
+  border-width: 2px;
 }
