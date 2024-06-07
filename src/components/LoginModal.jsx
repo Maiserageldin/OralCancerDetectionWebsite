@@ -1,15 +1,14 @@
 import axios from "axios";
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode"; // Correct way to import jwtDecode
+
 import { AccessTokenContext } from "./AccessTokenContext.jsx";
 
 const LoginModal = ({ handleClose, show }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const { setAccessToken } = useContext(AccessTokenContext);
-  // const [accessToken, setAccessToken] = useState(null);
-
   const [error, setError] = useState(null);
   const showHideClass = show
     ? "modal fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
@@ -17,11 +16,11 @@ const LoginModal = ({ handleClose, show }) => {
   const navigate = useNavigate();
 
   const handleUsernameChange = (e) => {
-    setUsername(e.target.value); // Update the username state variable with user input
+    setUsername(e.target.value);
   };
 
   const handlePasswordChange = (e) => {
-    setPassword(e.target.value); // Update the username state variable with user input
+    setPassword(e.target.value);
   };
 
   const handleLogin = async (e) => {
@@ -36,7 +35,19 @@ const LoginModal = ({ handleClose, show }) => {
           password: password,
         }
       );
-      console.log("Login Successfull!", response.data);
+
+      const { accessToken, id } = response.data;
+      setAccessToken(accessToken);
+      localStorage.setItem("userId", id); // Store the id in localStorage
+
+      const decodedData = jwtDecode(accessToken);
+      const roles =
+        decodedData?.[
+          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+        ];
+        console.log("Login Successfull!", response.data);
+        console.log("user id:",id);
+
       if (username.startsWith("p_")) {
         navigate("/patient");
       } else if (username.startsWith("d_")) {
@@ -44,41 +55,11 @@ const LoginModal = ({ handleClose, show }) => {
       } else {
         navigate("/employee");
       }
-
-      const accessToken = response.data?.accessToken;
-      setAccessToken(response.data?.accessToken);
-      handleClose();
-      const decodedData = jwtDecode(accessToken);
-      console.log("decodedData", decodedData);
-      const roles =
-        decodedData?.[
-          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-        ];
-
-      //console.log("accessToken", response.data?.accessToken);
       console.log("roles", roles);
-
-      // Navigate to patient dashboard
-      // if (roles?.includes("Patient")) {
-      //   // history.push("/patient");
-      //   navigate("/patient");
-      // }
-      // // Navigate to doctor dashboard
-      // else if (roles?.includes("Doctor")) {
-      //   // history.push("/doctor");
-      //   navigate("/doctor");
-      // }
-      // //  Navigate to employee dashboard
-      // else if (roles?.includes("Employee")) {
-      //   // history.push("/employee");
-      //   navigate("/employee");
-      // }
-      // // Handle unexpected role scenario
-      // else {
-      //   console.log("Unexpected role");
-      // }
+      handleClose();
     } catch (error) {
       console.error("Login Error:", error.response?.data || error.message);
+      setError(error.response?.data || error.message);
     }
   };
 
@@ -143,9 +124,11 @@ const LoginModal = ({ handleClose, show }) => {
               Login
             </button>
           </form>
+          {error && <div className="text-red-500 mt-4">{error}</div>}
         </div>
       </div>
     </div>
   );
 };
+
 export default LoginModal;

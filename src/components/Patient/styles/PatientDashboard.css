@@ -1,71 +1,127 @@
-.page-container{
-    margin: 20px;
+.page-container {
+  margin: 20px;
 }
 .Container {
-    padding: 20px;
+  padding: 20px;
    
-  }
+}
+.content {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px;
+  min-height: calc(100vh - 160px);
+}
+
+.column {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.patient-list {
+  list-style-type: none;
+}
+
+.patient-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+
+.section {
+  /* background-color: #e9e9e9; */
+  background-color: #f2e4fd;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  height: 95%;
+}
+
+.section h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
   span{
-    font-weight: bold;
-  }
-  
+  font-weight: bold;
+}
+
   .VisitList {
-    list-style: none;
-    padding: 20px;
-    background-color: #f2e4fd;
-    border-radius: 10px;
-    width: 70%;
-    min-height: calc(100vh - 160px);
-  }
+  list-style: none;
+  padding: 20px;
+  background-color: #f2e4fd;
+  border-radius: 10px;
+  width: 70%;
+  min-height: calc(100vh - 160px);
+}
   .VisitList li{
-    border-bottom: 1px solid #ccc;
-    margin-top: 10px;
-    background-color: white;
-    border-color: #a46ede;
-    border-radius: 10px;
+  border-bottom: 1px solid #ccc;
+  margin-top: 10px;
+  background-color: white;
+  border-color: #a46ede;
+  border-radius: 10px;
     display:flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  
+  align-items: center;
+  justify-content: space-between;
+}
+
   .VisitItem {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
   .VisitDate {
-    font-weight: bold;
-  }
-  
+  font-weight: bold;
+}
+
   .ViewButton {
-    background-color: #a46ede;
-    color: #fff;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-  }
-  
+  background-color: #a46ede;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
   .ViewButton:hover {
-    background-color: #fff;
-    color: #a46ede;
-  }
-  
+  background-color: #fff;
+  color: #a46ede;
+}
+
   .VisitDetails {
-    margin-top: 5px;
-    padding-left: 20px;
-    border-left: 2px solid #a46ede;
-  }
-  
+  margin-top: 5px;
+  padding-left: 20px;
+  border-left: 2px solid #a46ede;
+}
+
   h2 {
-    font-weight: bold;
-    font-size: large;
-  }
+  font-weight: bold;
+  font-size: large;
+}
   .row{
-    width: 100%;
-    display: flex;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+  .item{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    justify-content: space-between;
+    position: relative;
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+  width: 100%;
+  border-color: #a46ede;
+  border-width: 2px;
   }
