@@ -1,6 +1,20 @@
+import MainLayout from "./MainLayout";
+import { useState } from "react";
+import LoginModal from "./LoginModal";
+
 export default function BlockContainer() {
+  const [showModal, setShowModal] = useState(false);
+
+  const openModal = () => {
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
   return (
-    <div className="bg-[#270f3a] text-white rounded-lg shadow-md relative">
+    <div className=" text-white rounded-lg shadow-md relative">
       <img
         src="/bgContainer.png"
         alt="container"
@@ -12,14 +26,18 @@ export default function BlockContainer() {
           <h1 className="font-semibold">make healthcare more accessible</h1>
         </div>
         <div className="flex justify-center">
-          <button className="bg-[#270f3a] border border-white text-white rounded-full px-6 py-3 mr-4 font-semibold hover:bg-white hover:text-purple-500 transition duration-300 shadow-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
+          <button className="bg-purple-600 text-white rounded-full px-6 py-3 font-semibold hover:bg-white hover:text-purple-500 transition duration-300 shadow-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 mr-6">
             Our Story
           </button>
-          <button className="bg-purple-600 text-white rounded-full px-6 py-3 font-semibold hover:bg-white hover:text-purple-500 transition duration-300 shadow-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
-            Book an appointment
+          <button
+            className="bg-[#270f3a] border-4 border-white  text-white rounded-full px-6 py-3 font-semibold hover:bg-white hover:text-black transition duration-300 shadow-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 "
+            onClick={openModal}
+          >
+            Get Started!
           </button>
         </div>
       </div>
+      <LoginModal show={showModal} handleClose={closeModal} />
     </div>
   );
 }
