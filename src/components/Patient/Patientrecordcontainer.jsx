@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from "react";
 import "./styles/Patientrecordcontainer.css";
 import stainedimg from "../Doctor/imgs/stainedimg.jpeg";
 import microscopicimg from "../Doctor/imgs/microscpicimg.jpeg";
@@ -7,8 +7,8 @@ import { AccessTokenContext } from "../AccessTokenContext.jsx";
 
 function PatientRecordContainer({ userId }) {
   const [isPopupOpen, setPopupOpen] = useState(false);
-  const [comment, setComment] = useState('');
-  const [latestComment, setLatestComment] = useState('');
+  const [comment, setComment] = useState("");
+  const [latestComment, setLatestComment] = useState("");
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [currentImageId, setCurrentImageId] = useState(null);
   const [patientData, setPatientData] = useState(null);
@@ -17,7 +17,7 @@ function PatientRecordContainer({ userId }) {
   const { accessToken } = useContext(AccessTokenContext);
 
   useEffect(() => {
-    const storedVisitId = localStorage.getItem('visitId');
+    const storedVisitId = localStorage.getItem("visitId");
     if (storedVisitId) {
       setVisitId(storedVisitId);
       console.log("visit id:", storedVisitId);
@@ -29,24 +29,24 @@ function PatientRecordContainer({ userId }) {
       userId = localStorage.getItem("userId");
     }
 
-    console.log("Main Access Token: ", accessToken);
-    console.log("User Id ", userId);
+    //console.log("Main Access Token: ", accessToken);
+    //console.log("User Id ", userId);
 
     const fetchPatientData = async () => {
       try {
-        console.log('Fetching patient data...');
+        console.log("Fetching patient data...");
         const response = await axios.get(
-          `https://clinicmanagement20240427220332.azurewebsites.net/api/Visits/GetPatientVisits/${userId}`, 
+          `https://clinicmanagement20240427220332.azurewebsites.net/api/Visits/GetPatientVisits/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },
           }
         ); // Adjust endpoint as needed with patient ID
-        console.log('Patient data fetched:', response.data);
+        console.log("Patient data fetched:", response.data);
         const data = response.data.data;
 
-        const patientRecordArray = data.map(visitsDB => {
+        const patientRecordArray = data.map((visitsDB) => {
           let specialityName;
           let ageGroup;
           let gender;
@@ -56,122 +56,122 @@ function PatientRecordContainer({ userId }) {
           let alcoholConsumption;
 
           switch (visitsDB.speciality) {
-              case 0:
-                  specialityName = 'Oral and Maxillofacial Surgeon';
-                  break;
-              case 1:
-                  specialityName = 'Prosthodontist';
-                  break;
-              case 2:
-                  specialityName = 'Oral Pathologist';
-                  break;
-              default:
-                  specialityName = 'Oral Medcine Specialist';
-                  break;
+            case 0:
+              specialityName = "Oral and Maxillofacial Surgeon";
+              break;
+            case 1:
+              specialityName = "Prosthodontist";
+              break;
+            case 2:
+              specialityName = "Oral Pathologist";
+              break;
+            default:
+              specialityName = "Oral Medcine Specialist";
+              break;
           }
 
           switch (visitsDB.patientData.ageGroup) {
-              case 0:
-                  ageGroup = 'From 0 to 40';
-                  break;
-              case 1:
-                  ageGroup = 'From 41 to 60';
-                  break;
-              default:
-                  ageGroup = 'Above 61';
-                  break;
+            case 0:
+              ageGroup = "From 0 to 40";
+              break;
+            case 1:
+              ageGroup = "From 41 to 60";
+              break;
+            default:
+              ageGroup = "Above 61";
+              break;
           }
 
           switch (visitsDB.patientData.gender) {
-              case 0:
-                  gender = 'Female';
-                  break;
-              case 1:
-                  gender = 'Male';
-                  break;
-              default:
-                  gender = 'Other';
-                  break;
+            case 0:
+              gender = "Female";
+              break;
+            case 1:
+              gender = "Male";
+              break;
+            default:
+              gender = "Other";
+              break;
           }
 
           switch (visitsDB.patientData.aiDiagnosis) {
-              case 0:
-                  diagnosis = 'Leukoplakia without dysplasia';
-                  break;
-              case 1:
-                  diagnosis = 'Leukoplakia with dysplasia';
-                  break;
-              default:
-                  diagnosis = 'OSCC';
-                  break;
+            case 0:
+              diagnosis = "Leukoplakia without dysplasia";
+              break;
+            case 1:
+              diagnosis = "Leukoplakia with dysplasia";
+              break;
+            default:
+              diagnosis = "OSCC";
+              break;
           }
 
           switch (visitsDB.patientData.localization) {
-              case 0:
-                  localization = 'Gingiva';
-                  break;
-              case 1:
-                  localization = 'Palate';
-                  break;
-              case 2:
-                  localization = 'Buccal Mucosa';
-                  break;
-              case 3:
-                  localization = 'Floor of Mouth';
-                  break;
-              case 4:
-                  localization = 'Lip';
-                  break;
-              default:
-                  localization = 'Tongue';
-                  break;
+            case 0:
+              localization = "Gingiva";
+              break;
+            case 1:
+              localization = "Palate";
+              break;
+            case 2:
+              localization = "Buccal Mucosa";
+              break;
+            case 3:
+              localization = "Floor of Mouth";
+              break;
+            case 4:
+              localization = "Lip";
+              break;
+            default:
+              localization = "Tongue";
+              break;
           }
 
           switch (visitsDB.patientData.tobaccoUse) {
-              case 0:
-                  tobaccoUse = 'Not Informed';
-                  break;
-              case 1:
-                  tobaccoUse = 'Former';
-                  break;
-              case 2:
-                  tobaccoUse = 'No';
-                  break;
-              default:
-                  tobaccoUse = 'Yes';
-                  break;
+            case 0:
+              tobaccoUse = "Not Informed";
+              break;
+            case 1:
+              tobaccoUse = "Former";
+              break;
+            case 2:
+              tobaccoUse = "No";
+              break;
+            default:
+              tobaccoUse = "Yes";
+              break;
           }
 
           switch (visitsDB.patientData.alcoholConsumption) {
-              case 0:
-                  alcoholConsumption = 'Not Informed';
-                  break;
-              case 1:
-                  alcoholConsumption = 'Former';
-                  break;
-              case 2:
-                  alcoholConsumption = 'No';
-                  break;
-              default:
-                  alcoholConsumption = 'Yes';
-                  break;
+            case 0:
+              alcoholConsumption = "Not Informed";
+              break;
+            case 1:
+              alcoholConsumption = "Former";
+              break;
+            case 2:
+              alcoholConsumption = "No";
+              break;
+            default:
+              alcoholConsumption = "Yes";
+              break;
           }
 
           return {
-              id: visitsDB.id.toString(), // Ensure id is a string
-              visitNumber: visitsDB.visitNumber,
-              date: new Date(visitsDB.date).toISOString().split('T')[0],
-              ageGroup: ageGroup,
-              gender: gender,
-              diagnosis: diagnosis,
-              localization: localization,
-              tobaccoUse: tobaccoUse,
-              alcoholConsumption: alcoholConsumption,
-              stainingImagePath: visitsDB.patientData.stainingImagePath,
-              microscopicImagePath: visitsDB.patientData.microscopicImagePath,
-              doctorName: visitsDB.doctorName,
-              speciality: specialityName,
-              doctorComment: visitsDB.doctorComment || '',
+            id: visitsDB.id.toString(), // Ensure id is a string
+            visitNumber: visitsDB.visitNumber,
+            date: new Date(visitsDB.date).toISOString().split("T")[0],
+            ageGroup: ageGroup,
+            gender: gender,
+            diagnosis: diagnosis,
+            localization: localization,
+            tobaccoUse: tobaccoUse,
+            alcoholConsumption: alcoholConsumption,
+            stainingImagePath: visitsDB.patientData.stainingImagePath,
+            microscopicImagePath: visitsDB.patientData.microscopicImagePath,
+            doctorName: visitsDB.doctorName,
+            speciality: specialityName,
+            doctorComment: visitsDB.doctorComment || "",
           };
         });
 
@@ -179,14 +179,15 @@ function PatientRecordContainer({ userId }) {
         console.log("visitId type and value:", typeof visitId, visitId);
 
         // Find the visit that matches the stored visit ID
-        const visitData = patientRecordArray.find(record => record.id === visitId?.toString());
+        const visitData = patientRecordArray.find(
+          (record) => record.id === visitId?.toString()
+        );
 
         // Set the state variable with the fetched data
         setPatientData(visitData);
         console.log("Patient Record:", visitData);
-
       } catch (error) {
-        console.error('Error fetching patient data:', error);
+        console.error("Error fetching patient data:", error);
       }
     };
 
@@ -194,14 +195,14 @@ function PatientRecordContainer({ userId }) {
       fetchPatientData();
     }
 
-    document.addEventListener('fullscreenchange', handleFullScreenChange);
+    document.addEventListener("fullscreenchange", handleFullScreenChange);
     return () => {
-      document.removeEventListener('fullscreenchange', handleFullScreenChange);
+      document.removeEventListener("fullscreenchange", handleFullScreenChange);
     };
   }, [visitId, userId, accessToken]);
 
   const handleFullScreenChange = () => {
-    console.log('Full screen change detected');
+    console.log("Full screen change detected");
     setIsFullScreen(!!document.fullscreenElement);
   };
 
@@ -214,25 +215,25 @@ function PatientRecordContainer({ userId }) {
         setCurrentImageId(imageId);
       }
     } else {
-      console.log('Exiting full-screen mode');
+      console.log("Exiting full-screen mode");
       document.exitFullscreen();
       setCurrentImageId(null);
     }
   };
 
   const handleSaveComment = (newComment) => {
-    console.log('Saving new comment:', newComment);
+    console.log("Saving new comment:", newComment);
     setComment(newComment);
     setLatestComment(newComment);
     setPopupOpen(false);
   };
 
   if (!patientData) {
-    console.log('Empty array');
+    console.log("Empty array");
     return (
       <div className="empty-div">
         <h1>My Record</h1>
-        <div className='Middle-Page'>
+        <div className="Middle-Page">
           <div>Loading patient data...</div>
           <div>Please wait while we retrieve your information.</div>
         </div>
@@ -240,7 +241,7 @@ function PatientRecordContainer({ userId }) {
     );
   }
 
-  console.log('Rendering patient data:', patientData);
+  console.log("Rendering patient data:", patientData);
 
   return (
     <div className="Middle-Page">
@@ -257,7 +258,7 @@ function PatientRecordContainer({ userId }) {
             <li>Tobacco: {patientData.tobaccoUse}</li>
             <li>Alcohol Consumption: {patientData.alcoholConsumption}</li>
             <li>Diagnosis: {patientData.diagnosis}</li>
-           
+
             <li>Lesion Localization: {patientData.localization}</li>
             <li>Doctor : {patientData.doctorName}</li>
             <li>Speciality: {patientData.speciality}</li>
@@ -270,23 +271,24 @@ function PatientRecordContainer({ userId }) {
             id="stainedImage"
             src={patientData.stainingImagePath || stainedimg}
             alt="Stained Image"
-            onClick={() => toggleFullScreen('stainedImage')}
+            onClick={() => toggleFullScreen("stainedImage")}
           />
           <h2>Microscopic Images</h2>
           <img
             id="microscopicImage"
             src={patientData.microscopicImagePath || microscopicimg}
             alt="Microscopic Image"
-            onClick={() => toggleFullScreen('microscopicImage')}
+            onClick={() => toggleFullScreen("microscopicImage")}
           />
         </div>
         <div>
           <h1>AI Detector Result</h1>
-          <p>{patientData.diagnosis}</p><br />
+          <p>{patientData.diagnosis}</p>
+          <br />
         </div>
         <div>
           <h1>Doctor Comment</h1>
-          <p>{patientData.doctorComment || 'No comment available'}</p>
+          <p>{patientData.doctorComment || "No comment available"}</p>
         </div>
       </div>
     </div>

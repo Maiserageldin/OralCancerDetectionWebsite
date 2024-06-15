@@ -64,7 +64,7 @@ function PatientVisits({ userId }) {
         setVisits(VisitsArray);
       } catch (error) {
         console.error("Error fetching visits:", error);
-        setVisits([]); // Set to empty array on error
+        setVisits([]);
       }
     };
 
@@ -85,7 +85,7 @@ function PatientVisits({ userId }) {
 
   const handleViewRecord = (visitId) => {
     localStorage.setItem("visitId", visitId);
-    navigate("/patientRecord");
+    navigate("/patientRecord1");
   };
 
   if (!Array.isArray(visits) || visits.length === 0) {
@@ -101,49 +101,51 @@ function PatientVisits({ userId }) {
   }
 
   return (
-    <div className="page-container">
-      <Header />
-      <div className="content">
-        <div className="column">
-          <div className="section">
-            <div className="title-container">
-              <h2>My Visits</h2>
-            </div>
-            <ul className="patient-list">
-              {visits.map((visit) => (
-                <li key={visit.id}>
-                  <div className="item">
-                    <div className="row">
-                      <div>
-                        <FontAwesomeIcon
-                          icon={visit.showDetails ? faAngleUp : faAngleDown}
-                          className="toggle-icon"
-                          onClick={() => toggleDetails(visit.id)}
-                        />
-                        <span>{visit.date}</span>
+    <div className="patient-dashboard">
+      <div className="page-container">
+        <Header />
+        <div className="content">
+          <div className="column">
+            <div className="section">
+              <div className="title-container">
+                <h2>My Visits</h2>
+              </div>
+              <ul className="patient-list">
+                {visits.map((visit) => (
+                  <li key={visit.id}>
+                    <div className="item">
+                      <div className="row">
+                        <div>
+                          <FontAwesomeIcon
+                            icon={visit.showDetails ? faAngleUp : faAngleDown}
+                            className="toggle-icon"
+                            onClick={() => toggleDetails(visit.id)}
+                          />
+                          <span>{visit.date}</span>
+                        </div>
+                        <button
+                          className="ViewButton"
+                          onClick={() => handleViewRecord(visit.id)}
+                        >
+                          View Record
+                        </button>
                       </div>
-                      <button
-                        className="ViewButton"
-                        onClick={() => handleViewRecord(visit.id)}
-                      >
-                        View Record
-                      </button>
+                      {visit.showDetails && (
+                        <div className="details">
+                          <p>Doctor: {visit.doctorName}</p>
+                          <p>Doctor Speciality: {visit.speciality}</p>
+                          <p>Visit Number: {visit.visitNumber}</p>
+                        </div>
+                      )}
                     </div>
-                    {visit.showDetails && (
-                      <div className="details">
-                        <p>Doctor: {visit.doctorName}</p>
-                        <p>Doctor Speciality: {visit.speciality}</p>
-                        <p>Visit Number: {visit.visitNumber}</p>
-                      </div>
-                    )}
-                  </div>
-                </li>
-              ))}
-            </ul>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
+        <Footer />
       </div>
-      <Footer />
     </div>
   );
 }

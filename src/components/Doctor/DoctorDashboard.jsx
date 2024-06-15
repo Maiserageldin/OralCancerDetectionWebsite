@@ -8,6 +8,7 @@ import Layout from "../Layout";
 import "./styles/DoctorViewPatients.css";
 import { AccessTokenContext } from "../AccessTokenContext.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useNavigate } from "react-router-dom";
 import {
   faTrashAlt,
   faEdit,
@@ -17,50 +18,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 function Doctordashboard1() {
-  // const [patients, setPatients] = useState([
-  //   {
-  //     id: 1,
-  //     name: "Patient 1",
-  //     email: "patient1@example.com",
-  //     phone: "567-890-1234",
-  //     username: "patient1",
-  //     age: 25,
-  //     gender: "Male",
-  //     showDetails: false,
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Patient 2",
-  //     email: "patient2@example.com",
-  //     phone: "678-901-2345",
-  //     username: "patient2",
-  //     age: 30,
-  //     gender: "Female",
-  //     showDetails: false,
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "Patient 3",
-  //     email: "patient3@example.com",
-  //     phone: "789-012-3456",
-  //     username: "patient3",
-  //     age: 35,
-  //     gender: "Male",
-  //     showDetails: false,
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "Patient 4",
-  //     email: "patient4@example.com",
-  //     phone: "890-123-4567",
-  //     username: "patient4",
-  //     age: 40,
-  //     gender: "Female",
-  //     showDetails: false,
-  //   },
-  // ]);
-
-  //const { accessToken } = useContext(AccessTokenContext);
   const { accessToken, doctorId } = useContext(AccessTokenContext);
   const [patients, setPatients] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -69,6 +26,7 @@ function Doctordashboard1() {
   const [patientFilterBy, setPatientFilterBy] = useState("name");
   const loc = useLocation();
   const { usernameResponse } = loc.state || {};
+  const navigate = useNavigate();
 
   const handlePatientFilterChange = (event) => {
     setPatientFilter(event.target.value);
@@ -98,16 +56,19 @@ function Doctordashboard1() {
 
         console.log("Assigned patients:", assignedPatients);
 
-        // Create an array to store patient data
+        assignedPatients.forEach((patient) => {
+          console.log("Assigned Patient ID", patient.id);
+        });
+
         const patientsArray = assignedPatients.map((patientDB) => {
           return {
+            id: patientDB.id,
             name: patientDB.fullName,
             age: patientDB.age,
           };
         });
 
         setPatients(patientsArray);
-
         setIsLoading(false);
       } catch (error) {
         console.error("Error:", error);
@@ -115,28 +76,7 @@ function Doctordashboard1() {
       }
     };
 
-    // const fetchPatientsData = async () => {
-    //   try {
-    //     const response = await axios.get(
-    //       `https://clinicmanagement20240427220332.azurewebsites.net/api/Patient/18}`,
-    //       {
-    //         headers: {
-    //           Authorization: `Bearer ${accessToken}`,
-    //         },
-    //       }
-    //     );
-
-    //     console.log("patient data response", response);
-
-    //     setIsLoading(false);
-    //   } catch (error) {
-    //     console.error("Error:", error);
-    //     setIsLoading(false);
-    //   }
-    // };
-
     fetchPatients();
-    // fetchPatientsData();
   }, [accessToken]);
 
   const filteredPatients = patients.filter((patient) => {
@@ -173,6 +113,11 @@ function Doctordashboard1() {
   if (error) {
     return <div>Error: {error.message}</div>;
   }
+
+  const handleViewClick = (patientID) => {
+    console.log("patient ID", patientID);
+    navigate(`/patientVisits/${patientID}`);
+  };
 
   return (
     <div className="doctor-dashboard">
@@ -212,7 +157,7 @@ function Doctordashboard1() {
             </div>
 
             <ul className="patient-list">
-              {filteredPatients.map((patient) => (
+              {filteredPatients.map((patient, index) => (
                 <li key={patient.id}>
                   <div className="item">
                     <div className="row">
@@ -223,7 +168,13 @@ function Doctordashboard1() {
                       />
                       <span>{patient.name}</span>
                       <div className="actions">
-                        <button className="view-button">view</button>
+                        <button
+                          className="view-button"
+                          key={patient.id}
+                          onClick={() => handleViewClick(patient.id)}
+                        >
+                          View
+                        </button>
                       </div>
                     </div>
                     {patient.showDetails && (

@@ -7,6 +7,8 @@ import EmployeeDashboard from "./components/Employee/EmployeeDashboard";
 import PatientDashboard from "./components/Patient/PatientDashboard";
 import DoctorDashboard from "./components/Doctor/DoctorDashboard";
 import Patientrecord from "./components/Patient/Patientrecord";
+import PatientRecord from "./components/Doctor/PatientRecord";
+import PatientVisit from "./components/Doctor/PatientVisit";
 import "./fontAwesome";
 import {
   BrowserRouter as Router,
@@ -30,11 +32,14 @@ function App() {
   return (
     <Router>
       <Routes>
+        ``
         <Route path="/" element={<MainLayout />} />
         <Route path="/patient" element={<PatientDashboard />} />
         <Route path="/doctor" element={<DoctorDashboard />} />
         <Route path="/employee" element={<EmployeeDashboard />} />
-        <Route path="/patientRecord" element={<Patientrecord/>} />
+        <Route path="/patientRecord1" element={<Patientrecord />} />
+        <Route path="/patientRecord/:patientID" element={<PatientRecord />} />
+        <Route path="/patientVisits/:patientID" element={<PatientVisit />} />
       </Routes>
     </Router>
   );

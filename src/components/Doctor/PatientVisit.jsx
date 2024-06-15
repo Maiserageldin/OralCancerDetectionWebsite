@@ -1,93 +1,144 @@
-import React, { useState } from 'react';
-import Footer from '../Footer';
-import Header from '../Header';
-import './styles/PatientVisit.css'; 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashAlt, faEdit, faAngleDown, faAngleUp, faPlus } from '@fortawesome/free-solid-svg-icons';
+import React, { useState, useEffect, useContext } from "react";
+import axios from "axios";
+//import Header2 from "../Header2";
+import Header from "../Header";
 
+import Layout from "../Layout";
+import Footer from "../Footer";
+import { useNavigate } from "react-router-dom";
+import "./styles/PatientVisit.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faTrashAlt,
+  faEdit,
+  faAngleDown,
+  faAngleUp,
+  faPlus,
+} from "@fortawesome/free-solid-svg-icons";
+import { useParams } from "react-router-dom";
+import { AccessTokenContext } from "../AccessTokenContext.jsx";
 
-function PatientVisits({ patient }) {
-  const [visits, setVisits] = useState([
-    // Example visits data
-    { id: 1, date: '2022-04-01', details: 'Visit details 1' },
-    { id: 2, date: '2022-04-15', details: 'Visit details 2' },
-    { id: 3, date: '2022-05-03', details: 'Visit details 3' },
-  ]);
+function PatientVisits() {
+  const { accessToken } = useContext(AccessTokenContext);
+  const [visits, setVisits] = useState([]);
+  const { patientID } = useParams();
+  const navigate = useNavigate();
+  console.log(patientID);
+
+  useEffect(() => {
+    const fetchVisits = async () => {
+      try {
+        const response = await axios.get(
+          `https://clinicmanagement20240427220332.azurewebsites.net/api/Visits/GetPatientVisits/${patientID}`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+
+        const data = response.data.data;
+        console.log("Fetched data:", data);
+
+        const VisitsArray = data.map((Visitdb) => {
+          let specialityName;
+
+          switch (Visitdb.speciality) {
+            case 0:
+              specialityName = "Oral and Maxillofacial Surgeon";
+              break;
+            case 1:
+              specialityName = "Prosthodontist";
+              break;
+            case 2:
+              specialityName = "Oral Pathologist";
+              break;
+            default:
+              specialityName = "Oral Medicine Specialist";
+              break;
+          }
+          return {
+            id: Visitdb.id,
+            date: new Date(Visitdb.date).toISOString().split("T")[0],
+            doctorName: Visitdb.doctorName,
+            speciality: specialityName,
+            visitNumber: Visitdb.visitNumber,
+          };
+        });
+        setVisits(VisitsArray);
+      } catch (error) {
+        console.error("Error fetching visits:", error);
+        setVisits([]);
+      }
+    };
+
+    fetchVisits();
+  }, [patientID, accessToken]);
 
   const toggleDetails = (visitId) => {
-     setVisits(visits.map((visit) =>
-      visit.id === visitId ? { ...visit, showDetails: !visit.showDetails } : visit
-    ));
+    setVisits(
+      visits.map((visit) =>
+        visit.id === visitId
+          ? { ...visit, showDetails: !visit.showDetails }
+          : visit
+      )
+    );
   };
-  
-  
-  return (
-    <div>
-        <Header/>
-        <div className="content">
-            <div className="column">
-                <div className="section">
-                    <div className="title-container">
-                        <h2>Visits Of Patient 1</h2>
-                    </div>
 
-                   <ul className="patient-list">
-                   {visits.map(visit => (
-                    <li key={visit.id}>
-                     <div className="item">
-                     
-                    <FontAwesomeIcon icon={visit.showDetails ? faAngleUp : faAngleDown} className="toggle-icon" onClick={() => toggleDetails(visit.id)} />
-                    <div className="row"> 
-                    <span>{visit.id}</span>
-                    <span>{visit.date}</span>
-                  
-                </div>
-               { visit.showDetails && (
-                    <div className="details">
-                        <p>details: {visit.details}</p>
-                        </div>
-                )}
-                     </div>
-                     
-                   </li>
-           ))}
-                  </ul>
-                </div>
-            </div>
-       
-        </div>
-     <Footer/></div>
-)
- /* return (
-    <div className='page-container'> 
-      <Header />
-      <div className="Container">
-        <h2>{`Visits for Patient 1`}</h2>
-        <ul className="VisitList">
-          {visits.map((visit) => (
-            <li key={visit.id}>
-              <div className="VisitItem">
-              <div className="Visitid">{visit.id}</div>
-                <div className="VisitDate">{visit.date}</div>
-                <button
-                  className="ViewButton"
-                  onClick={() => toggleDetails(visit.id)}
-                >
-                  {visit.showDetails ? 'Hide ' : 'View '}
-                </button>
+  const handleViewRecord = (visitId, patientID) => {
+    console.log("visit ID", visitId);
+    localStorage.setItem("visitId", visitId);
+    navigate(`/patientRecord/${patientID}`);
+  };
+
+  return (
+    <div className="doctor-dashboard">
+      <div className="page-container">
+        <Header />
+        <div className="content">
+          <div className="column">
+            <div className="section">
+              <div className="title-container">
+                <h2>My Visits</h2>
               </div>
-              {visit.showDetails && (
-                <div className="VisitDetails">
-                  <p>{visit.details}</p>
-                </div>
-              )}
-            </li>
-          ))}
-        </ul>
+              <ul className="patient-list">
+                {visits.map((visit) => (
+                  <li key={visit.id}>
+                    <div className="item">
+                      <div className="row">
+                        <div>
+                          <FontAwesomeIcon
+                            icon={visit.showDetails ? faAngleUp : faAngleDown}
+                            className="toggle-icon"
+                            onClick={() => toggleDetails(visit.id)}
+                          />
+                          <span>{visit.date}</span>
+                        </div>
+                        <button
+                          className="ViewButton"
+                          onClick={() => handleViewRecord(visit.id, patientID)}
+                        >
+                          View Record
+                        </button>
+                      </div>
+                      {visit.showDetails && (
+                        <div className="details">
+                          <p>Doctor: {visit.doctorName}</p>
+                          <p>Doctor Speciality: {visit.speciality}</p>
+                          <p>Visit Number: {visit.visitNumber}</p>
+                        </div>
+                      )}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+        <Footer />
       </div>
-      <Footer />
     </div>
-  );*/
+  );
 }
 
 export default PatientVisits;

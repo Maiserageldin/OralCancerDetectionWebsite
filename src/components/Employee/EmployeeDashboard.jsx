@@ -1,12 +1,14 @@
-// import React, { useState } from 'react';
 import React, { useState, useEffect, useContext } from "react";
-// import React, { useContext, useState } from "react";
-
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { AccessTokenContext } from "../AccessTokenContext.jsx";
 import "./styles/employeeHome.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Layout from "../Layout";
+import Footer from "../Footer";
+import Header2 from "../Header2";
+
 import {
   faTrashAlt,
   faEdit,
@@ -27,8 +29,9 @@ import ViewVisitsModal from "./ViewVisitsModal";
 
 function EmployeeDashboard() {
   const { accessToken } = useContext(AccessTokenContext);
+  const loc = useLocation();
   console.log("Main Access Token: ", accessToken);
-
+  const { usernameResponse } = loc.state || {};
   const [showAddEmployeeForm, setShowAddEmployeeForm] = useState(false);
   const [showAddDoctorForm, setShowAddDoctorForm] = useState(false);
   const [showAddPatientForm, setShowAddPatientForm] = useState(false);
@@ -94,23 +97,6 @@ function EmployeeDashboard() {
       visits: [],
     },
   ]);
-
-  // const [doctors, setDoctors] = useState([
-  //     { id: 1, name: 'Doctor 1', email: 'doctor1@example.com', phone: '123-456-7890', username: 'doctor1', password: "", age: 35, gender: 'Male', specialty: 'Cardiology', showDetails: false },
-  //     { id: 2, name: 'Doctor 2', email: 'doctor2@example.com', phone: '234-567-8901', username: 'doctor2', password: "", age: 40, gender: 'Female', specialty: 'Pediatrics', showDetails: false },
-  //     { id: 3, name: 'Doctor 3', email: 'doctor3@example.com', phone: '345-678-9012', username: 'doctor3', password: "", age: 45, gender: 'Male', specialty: 'Orthopedics', showDetails: false },
-  //     { id: 4, name: 'Doctor 4', email: 'doctor4@example.com', phone: '456-789-0123', username: 'doctor4', password: "", age: 50, gender: 'Female', specialty: 'Dermatology', showDetails: false },
-  //     { id: 5, name: 'Doctor 5', email: 'doctor3@example.com', phone: '345-678-9012', username: 'doctor5', password: "", age: 45, gender: 'Male', specialty: 'Orthopedics', showDetails: false },
-  //     { id: 6, name: 'Doctor 6', email: 'doctor3@example.com', phone: '345-678-9012', username: 'doctor6', password: "", age: 45, gender: 'Male', specialty: 'Orthopedics', showDetails: false },
-  //     { id: 7, name: 'Doctor 7', email: 'doctor3@example.com', phone: '345-678-9012', username: 'doctor7', password: "", age: 45, gender: 'Male', specialty: 'Orthopedics', showDetails: false }
-  // ]);
-
-  // const [patients, setPatients] = useState([
-  //     { id: 1, name: 'Patient 1', email: 'patient1@example.com', phone: '567-890-1234', username: 'patient1', password: "", age: 25, gender: 'Male', showDetails: false, visits: [] },
-  //     { id: 2, name: 'Patient 2', email: 'patient2@example.com', phone: '678-901-2345', username: 'patient2', password: "", age: 30, gender: 'Female', showDetails: false, visits: [] },
-  //     { id: 3, name: 'Patient 3', email: 'patient3@example.com', phone: '789-012-3456', username: 'patient3', password: "", age: 35, gender: 'Male', showDetails: false, visits: [] },
-  //     { id: 4, name: 'Patient 4', email: 'patient4@example.com', phone: '890-123-4567', username: 'patient4', password: "", age: 40, gender: 'Female', showDetails: false, visits: [] }
-  // ]);
 
   // Fetch doctors data from API
   useEffect(() => {
@@ -610,6 +596,9 @@ function EmployeeDashboard() {
 
   return (
     <div className="employee-dashboard">
+      <Layout>
+        <Header2 username={usernameResponse} />
+      </Layout>
       <div className="register-button-container">
         <button className="register-button" onClick={toggleAddEmployeeForm}>
           Register an Employee
@@ -855,6 +844,10 @@ function EmployeeDashboard() {
         visits={visits}
         selectedPatientName={selectedPatientName}
       />
+
+      <Layout>
+        <Footer />
+      </Layout>
     </div>
   );
 }

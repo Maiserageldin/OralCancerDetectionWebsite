@@ -1,174 +1,200 @@
-
 .doctor-dashboard * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .doctor-dashboard .option {
-    cursor: pointer;
-    padding-left: 20px;
-    padding-right: 20px;
-    align-self: center;
-    color: white;
-    font-size: medium;
+  cursor: pointer;
+  padding-left: 20px;
+  padding-right: 20px;
+  align-self: center;
+  color: white;
+  font-size: medium;
+}
+
+.doctor-dashboard .ViewButton {
+  background-color: #a46ede;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.doctor-dashboard .ViewButton {
+  background-color: #a46ede;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.doctor-dashboard .ViewButton:hover {
+  background-color: #fff;
+  color: #a46ede;
 }
 
 .doctor-dashboard .content {
-    display: flex;
-    justify-content: space-between;
-    margin: 20px auto;
-    min-height: calc(100vh - 160px);
-    width: 80%;
+  display: flex;
+  justify-content: space-between;
+  margin: 20px auto;
+  min-height: calc(100vh - 160px);
+  width: 80%;
 }
 
 .doctor-dashboard .column {
-    flex: 1;
-    margin-right: 20px;
+  flex: 1;
+  margin-right: 20px;
 }
 
 .doctor-dashboard .title-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .doctor-dashboard .section {
-    background-color: #f2e4fd;
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    height: 95%;
+  background-color: #f2e4fd;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  height: 95%;
 }
 
 .doctor-dashboard .section h2 {
-    font-size: 20px;
-    margin-bottom: 10px;
+  font-size: 20px;
+  margin-bottom: 10px;
 }
 
 .doctor-dashboard .add-btn {
-    background-color: #a46ede;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-bottom: 10px;
+  background-color: #a46ede;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 10px;
 }
 
 .doctor-dashboard .filter-container {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-    border-radius: 5px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  border-radius: 5px;
 }
 
 .doctor-dashboard .filter-left-container {
-    display: flex;
-    align-items: center;
-    border-radius: 5px;
-    width: 50%;
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  width: 50%;
 }
 
 .doctor-dashboard .filter-input {
-    width: 100%;
+  width: 100%;
 }
 
 .doctor-dashboard .filter-select {
-    width: 60%;
+  width: 60%;
 }
 
 .doctor-dashboard .filter-input,
 .doctor-dashboard .filter-select {
-    padding: 5px;
-    border-radius: 5px;
+  padding: 5px;
+  border-radius: 5px;
 }
 
 .doctor-dashboard .section h2 {
-    font-size: 20px;
-    margin-bottom: 10px;
+  font-size: 20px;
+  margin-bottom: 10px;
 }
 
-.doctor-dashboard .patient-list, 
+.doctor-dashboard .patient-list,
 .doctor-dashboard .doctor-list {
-    list-style-type: none;
+  list-style-type: none;
 }
 
-.doctor-dashboard .patient-list li, 
+.doctor-dashboard .patient-list li,
 .doctor-dashboard .doctor-list li {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-    height: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  height: fit-content;
 }
 
 .doctor-dashboard .item {
-    position: relative;
-    background-color: white;
-    padding: 10px;
-    border-radius: 10px;
-    width: 100%;
-    border-color: #a46ede;
-    border-width: 2px;
-    display: flex;
-    justify-content: space-between;
+  position: relative;
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+  width: 100%;
+  border-color: #a46ede;
+  border-width: 2px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .doctor-dashboard .row {
-    display: flex;
-    justify-content: space-between; /* Distribute items along the row */
-    align-items: center; /* Center the content vertically */
+  display: flex;
+  justify-content: space-between; /* Distribute items along the row */
+  align-items: center; /* Center the content vertically */
 }
 
 .doctor-dashboard .row > * {
-    margin: 0 5px; /* Add margin between items */
+  margin: 0 5px; /* Add margin between items */
+}
+
+.doctor-dashboard .row > span {
+  flex-grow: 1; /* Make the span take up remaining space */
 }
 
 .doctor-dashboard .actions {
-    position: absolute;
-    padding: 10px;
-    top: 0;
-    right: 0;
+  position: absolute;
+  padding: 10px;
+  top: 0;
+  right: 0;
 }
 
 .doctor-dashboard .details {
-    position: relative;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 10px;
+  position: relative;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px;
 }
 
 .doctor-dashboard .add-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: #a46ede;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #a46ede;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .doctor-dashboard .add-btn:hover {
-    background-color: blueviolet;
+  background-color: blueviolet;
 }
 
 .doctor-dashboard .add-btn .add-icon {
-    font-size: 25px;
+  font-size: 25px;
 }
 
 .doctor-dashboard button {
-    padding: 10px;
+  padding: 10px;
 }
 
 .doctor-dashboard .view-button {
-    width: 80px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
+  width: 80px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
 }

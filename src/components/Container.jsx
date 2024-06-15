@@ -12,7 +12,7 @@ export default function BlockContainer() {
           <h1 className="font-semibold">make healthcare more accessible</h1>
         </div>
         <div className="flex justify-center">
-          <button className="bg-[#270f3a] border border-white text-white rounded-full px-6 py-3 mr-4 font-semibold hover:bg-white hover:text- transition duration-300 shadow-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
+          <button className="bg-[#270f3a] border border-white text-white rounded-full px-6 py-3 mr-4 font-semibold hover:bg-white hover:text-purple-500 transition duration-300 shadow-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
             Our Story
           </button>
           <button className="bg-purple-600 text-white rounded-full px-6 py-3 font-semibold hover:bg-white hover:text-purple-500 transition duration-300 shadow-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
