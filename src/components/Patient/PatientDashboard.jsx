@@ -2,15 +2,21 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../Footer";
 import Header from "../Header";
+import Header2 from "../Header2";
+import Layout from "../Layout";
+import { useLocation } from "react-router-dom";
 import "./styles/PatientDashboard.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { AccessTokenContext } from "../AccessTokenContext.jsx";
+import { useHistory } from 'react-router-dom';
 
 function PatientVisits({ userId }) {
   const { accessToken } = useContext(AccessTokenContext);
   const navigate = useNavigate();
+  const loc = useLocation();
+  const { usernameResponse } = loc.state || {};
 
   if (!userId) {
     userId = localStorage.getItem("userId");
@@ -85,7 +91,8 @@ function PatientVisits({ userId }) {
 
   const handleViewRecord = (visitId) => {
     localStorage.setItem("visitId", visitId);
-    navigate("/patientRecord1");
+    console.log("Passing usernameResponse:", usernameResponse);
+    navigate("/patientRecord1",{ state: { usernameResponse } });
   };
 
   if (!Array.isArray(visits) || visits.length === 0) {
@@ -103,7 +110,9 @@ function PatientVisits({ userId }) {
   return (
     <div className="patient-dashboard">
       <div className="page-container">
-        <Header />
+      <Layout>
+        <Header2 username={usernameResponse} />
+      </Layout>
         <div className="content">
           <div className="column">
             <div className="section">

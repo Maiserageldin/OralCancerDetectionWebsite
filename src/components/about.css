@@ -1,0 +1,21 @@
+/* Add this CSS to your stylesheet (e.g., styles.css) */
+.bg-with-image {
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.8); /* Adjust the base color and opacity as needed */
+  }
+  
+  .bg-with-image::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../../public/Borcelle\ Hospital.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.5; /* Adjust the opacity to make the image transparent */
+    z-index: -1; /* Ensure the image stays behind the content */
+  }
+  

@@ -2,14 +2,15 @@ import React from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import Layout from "./Layout";
+import'./about.css';
 export default function About() {
   return (
-    <div>
+    <div >
       <Layout>
         <Header />
       </Layout>
-
-      <div className="bg-gray-100 py-12">
+     
+      <div className="bg-gray-100 py-12 bg-with-image">
         <div className="max-w-4xl mx-auto px-4">
           <h1 className="text-3xl font-bold mb-4 text-purple-900">
             About Our Website
@@ -45,6 +46,7 @@ export default function About() {
             thereby improving patient outcomes and reducing the societal burden
             of oral cancer.
           </p>
+         
         </div>
       </div>
 

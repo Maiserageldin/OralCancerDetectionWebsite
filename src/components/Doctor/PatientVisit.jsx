@@ -1,21 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-//import Header2 from "../Header2";
-import Header from "../Header";
-
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import Layout from "../Layout";
 import Footer from "../Footer";
-import { useNavigate } from "react-router-dom";
+import Header2 from "../Header2";
 import "./styles/PatientVisit.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faTrashAlt,
-  faEdit,
-  faAngleDown,
-  faAngleUp,
-  faPlus,
-} from "@fortawesome/free-solid-svg-icons";
-import { useParams } from "react-router-dom";
+import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
 import { AccessTokenContext } from "../AccessTokenContext.jsx";
 
 function PatientVisits() {
@@ -23,7 +14,11 @@ function PatientVisits() {
   const [visits, setVisits] = useState([]);
   const { patientID } = useParams();
   const navigate = useNavigate();
-  console.log(patientID);
+  const loc = useLocation();
+  const { usernameResponse } = loc.state || {};
+  
+  console.log("patientID:", patientID);
+  console.log("usernameResponse:", usernameResponse);
 
   useEffect(() => {
     const fetchVisits = async () => {
@@ -85,21 +80,23 @@ function PatientVisits() {
     );
   };
 
-  const handleViewRecord = (visitId, patientID) => {
+  const handleViewRecord = (visitId) => {
     console.log("visit ID", visitId);
     localStorage.setItem("visitId", visitId);
-    navigate(`/patientRecord/${patientID}`);
+    navigate(`/patientRecord/${patientID}`, { state: { usernameResponse } });
   };
 
   return (
     <div className="doctor-dashboard">
       <div className="page-container">
-        <Header />
+        <Layout>
+          <Header2 username={usernameResponse} />
+        </Layout>
         <div className="content">
           <div className="column">
             <div className="section">
               <div className="title-container">
-                <h2>My Visits</h2>
+                <h2>Patient Visits</h2>
               </div>
               <ul className="patient-list">
                 {visits.map((visit) => (
@@ -116,7 +113,7 @@ function PatientVisits() {
                         </div>
                         <button
                           className="ViewButton"
-                          onClick={() => handleViewRecord(visit.id, patientID)}
+                          onClick={() => handleViewRecord(visit.id)}
                         >
                           View Record
                         </button>

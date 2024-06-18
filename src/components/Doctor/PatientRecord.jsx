@@ -7,13 +7,21 @@ import Footer from "../Footer";
 import React, { useState, useEffect } from "react";
 import PatientRecordConatiner from "./PatientRecordConatiner";
 import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 function PatientRecord() {
   const { patientID } = useParams();
   console.log(patientID);
+  console.log("wslna patinet record");
+  const loc = useLocation();
+  console.log("Location state:", loc.state);
+  const { usernameResponse } = loc.state || {};
+  console.log("Username Response:", usernameResponse);
   return (
     <div className="Container">
-      <Header />
+      <Layout>
+        <Header2 username={usernameResponse} />
+      </Layout>
 
       <PatientRecordConatiner patientID={patientID} />
       <Layout>

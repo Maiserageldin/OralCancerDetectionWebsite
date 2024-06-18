@@ -1,9 +1,11 @@
 import MainLayout from "./MainLayout";
 import { useState } from "react";
 import LoginModal from "./LoginModal";
+import { useNavigate } from 'react-router-dom';
 
 export default function BlockContainer() {
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
 
   const openModal = () => {
     setShowModal(true);
@@ -11,6 +13,10 @@ export default function BlockContainer() {
 
   const closeModal = () => {
     setShowModal(false);
+  };
+
+  const handleNavigate = () => {
+    navigate('/story');
   };
 
   return (
@@ -26,7 +32,8 @@ export default function BlockContainer() {
           <h1 className="font-semibold">make healthcare more accessible</h1>
         </div>
         <div className="flex justify-center">
-          <button className="bg-purple-600 text-white rounded-full px-6 py-3 font-semibold hover:bg-white hover:text-purple-500 transition duration-300 shadow-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 mr-6">
+          <button className="bg-purple-600 text-white rounded-full px-6 py-3 font-semibold hover:bg-white hover:text-purple-500 transition duration-300 shadow-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 mr-6" 
+          onClick={handleNavigate}>
             Our Story
           </button>
           <button

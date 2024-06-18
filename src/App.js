@@ -6,6 +6,7 @@ import Patientrecord from "./components/Patient/Patientrecord";
 import PatientRecord from "./components/Doctor/PatientRecord";
 import PatientVisit from "./components/Doctor/PatientVisit";
 import About from "./components/About";
+import Story from "./components/Story";
 import "./fontAwesome";
 import {
   BrowserRouter as Router,
@@ -22,6 +23,7 @@ function App() {
         <Route path="/mainLayout" element={<MainLayout />} />
         <Route path="/patient" element={<PatientDashboard />} />
         <Route path="/about" element={<About />} />
+        <Route path="/story" element={<Story />} />
         <Route path="/doctor" element={<DoctorDashboard />} />
         <Route path="/employee" element={<EmployeeDashboard />} />
         <Route path="/patientRecord1" element={<Patientrecord />} />

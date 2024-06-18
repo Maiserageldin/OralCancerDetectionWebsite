@@ -1,26 +1,18 @@
-import React, { useContext, useState } from "react";
-import { useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Footer from "../Footer";
 import Header2 from "../Header2";
 import Layout from "../Layout";
 import "./styles/DoctorViewPatients.css";
 import { AccessTokenContext } from "../AccessTokenContext.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useNavigate } from "react-router-dom";
-import {
-  faTrashAlt,
-  faEdit,
-  faAngleDown,
-  faAngleUp,
-  faPlus,
-} from "@fortawesome/free-solid-svg-icons";
+import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
 
 function Doctordashboard1() {
   const { accessToken, doctorId } = useContext(AccessTokenContext);
   const [patients, setPatients] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [patientFilter, setPatientFilter] = useState("");
   const [error, setError] = useState(null);
   const [patientFilterBy, setPatientFilterBy] = useState("name");
@@ -28,17 +20,9 @@ function Doctordashboard1() {
   const { usernameResponse } = loc.state || {};
   const navigate = useNavigate();
 
-  const handlePatientFilterChange = (event) => {
-    setPatientFilter(event.target.value);
-  };
+  console.log('username', usernameResponse);
 
-  const handlePatientFilterByChange = (event) => {
-    setPatientFilterBy(event.target.value);
-  };
-
-  // Fetch doctors data from API
   useEffect(() => {
-    // console.log("access token", accessToken);
     const fetchPatients = async () => {
       try {
         const response = await axios.get(
@@ -50,34 +34,42 @@ function Doctordashboard1() {
           }
         );
 
-        console.log("response", response);
-
         const assignedPatients = response.data.data.assignedPatients;
-
-        console.log("Assigned patients:", assignedPatients);
-
-        assignedPatients.forEach((patient) => {
-          console.log("Assigned Patient ID", patient.id);
-        });
-
-        const patientsArray = assignedPatients.map((patientDB) => {
-          return {
-            id: patientDB.id,
-            name: patientDB.fullName,
-            age: patientDB.age,
-          };
-        });
+        const patientsArray = assignedPatients.map((patientDB) => ({
+          id: patientDB.id,
+          name: patientDB.fullName,
+          age: patientDB.age,
+          email: patientDB.email,
+          phone: patientDB.phone,
+          username: patientDB.username,
+          gender: patientDB.gender,
+        }));
 
         setPatients(patientsArray);
-        setIsLoading(false);
       } catch (error) {
         console.error("Error:", error);
+        setError(error);
+      } finally {
         setIsLoading(false);
       }
     };
 
     fetchPatients();
-  }, [accessToken]);
+  }, [accessToken, doctorId]);
+
+  const handlePatientFilterChange = (event) => {
+    setPatientFilter(event.target.value);
+  };
+
+  const handlePatientFilterByChange = (event) => {
+    setPatientFilterBy(event.target.value);
+  };
+
+  const handleViewClick = (patientID) => {
+    console.log("Navigating to patient visits with patient ID:", patientID);
+    console.log("Passing usernameResponse:", usernameResponse);
+    navigate(`/patientVisits/${patientID}`, { state: { usernameResponse } });
+  };
 
   const filteredPatients = patients.filter((patient) => {
     if (patientFilterBy === "name") {
@@ -87,23 +79,18 @@ function Doctordashboard1() {
     } else if (patientFilterBy === "phone") {
       return patient.phone.toLowerCase().includes(patientFilter.toLowerCase());
     } else if (patientFilterBy === "username") {
-      return patient.username
-        .toLowerCase()
-        .includes(patientFilter.toLowerCase());
+      return patient.username.toLowerCase().includes(patientFilter.toLowerCase());
     } else if (patientFilterBy === "age") {
       return patient.age.toString().includes(patientFilter);
     } else if (patientFilterBy === "gender") {
       return patient.gender.toLowerCase() === patientFilter.toLowerCase();
     }
+    return false;
   });
 
   const toggleDetails = (item) => {
     item.showDetails = !item.showDetails;
-    if (item.showDetails) {
-      setPatients([...patients]);
-    } else {
-      setPatients([...patients]);
-    }
+    setPatients([...patients]);
   };
 
   if (isLoading) {
@@ -113,11 +100,6 @@ function Doctordashboard1() {
   if (error) {
     return <div>Error: {error.message}</div>;
   }
-
-  const handleViewClick = (patientID) => {
-    console.log("patient ID", patientID);
-    navigate(`/patientVisits/${patientID}`);
-  };
 
   return (
     <div className="doctor-dashboard">
@@ -157,7 +139,7 @@ function Doctordashboard1() {
             </div>
 
             <ul className="patient-list">
-              {filteredPatients.map((patient, index) => (
+              {filteredPatients.map((patient) => (
                 <li key={patient.id}>
                   <div className="item">
                     <div className="row">
@@ -170,7 +152,6 @@ function Doctordashboard1() {
                       <div className="actions">
                         <button
                           className="view-button"
-                          key={patient.id}
                           onClick={() => handleViewClick(patient.id)}
                         >
                           View
@@ -193,9 +174,7 @@ function Doctordashboard1() {
           </div>
         </div>
       </div>
-      <Layout>
-        <Footer />
-      </Layout>
+      <Footer />
     </div>
   );
 }

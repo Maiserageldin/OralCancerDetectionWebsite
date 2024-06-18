@@ -160,6 +160,7 @@ function PatientRecordContainer({ userId }) {
           return {
             id: visitsDB.id.toString(), // Ensure id is a string
             visitNumber: visitsDB.visitNumber,
+            name:visitsDB.patientName,
             date: new Date(visitsDB.date).toISOString().split("T")[0],
             ageGroup: ageGroup,
             gender: gender,

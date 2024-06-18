@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
 import {
   faMapMarkerAlt,
   faPhoneAlt,
@@ -11,7 +12,9 @@ export default function Footer() {
       <div className=" grid grid-cols-1 lg:grid-cols-2 gap-12">
         {/* Left side */}
         <div className="flex flex-col">
-          <img src="/logo.png" alt="Logo" className="w-40 h-20 mb-4" />
+        <Link to="/MainLayout">
+        <img className="w-40 h-15" src="/logo.png" alt="Logo" />
+      </Link>
           <p className="text-gray-600 mb-4">
             Subscribe to our newsletter and get the latest news and updates.
           </p>

@@ -1,4 +1,10 @@
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useNavigate } from "react-router-dom";
+import {
+  faSignOutAlt
+  
+} from "@fortawesome/free-solid-svg-icons";
 
 export default function Header2({ username }) {
   return (
@@ -10,6 +16,12 @@ export default function Header2({ username }) {
         <li className="text-black text-xl font-bold font-josefin-sans italic bg-gray-100 px-4 py-2 rounded-lg shadow-sm">
           Logged in as, <span className="text-purple-600">{username}</span>
         </li>
+        <Link to="/MainLayout">
+      <button>
+        <FontAwesomeIcon icon={faSignOutAlt} style={{ marginRight: '8px' }} />
+        Log out
+      </button>
+    </Link>
       </ul>
     </div>
   );
