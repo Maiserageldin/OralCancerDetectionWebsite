@@ -47,56 +47,7 @@ function EmployeeDashboard() {
   const [showViewVisitsModal, setShowViewVisitsModal] = useState(false);
   const [visits, setVisits] = useState([]);
 
-  const [employees, setEmployees] = useState([
-    {
-      id: 1,
-      name: "Emp 1",
-      email: "emp@example.com",
-      phone: "567-890-1234",
-      username: "emp",
-      password: "",
-      age: 25,
-      gender: "Male",
-      showDetails: false,
-      visits: [],
-    },
-    {
-      id: 2,
-      name: "Emp 2",
-      email: "emp@example.com",
-      phone: "678-901-2345",
-      username: "emp",
-      password: "",
-      age: 30,
-      gender: "Female",
-      showDetails: false,
-      visits: [],
-    },
-    {
-      id: 3,
-      name: "Emp 3",
-      email: "emp@example.com",
-      phone: "789-012-3456",
-      username: "emp",
-      password: "",
-      age: 35,
-      gender: "Male",
-      showDetails: false,
-      visits: [],
-    },
-    {
-      id: 4,
-      name: "Emp 4",
-      email: "emp@example.com",
-      phone: "890-123-4567",
-      username: "emp",
-      password: "",
-      age: 40,
-      gender: "Female",
-      showDetails: false,
-      visits: [],
-    },
-  ]);
+  const [employees, setEmployees] = useState([]);
 
   // Fetch doctors data from API
   useEffect(() => {
