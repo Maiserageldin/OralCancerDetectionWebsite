@@ -88,7 +88,7 @@ const AddPatient = ({ handleClose, show, addPatient }) => {
           // } else {
           //   ageGroup = 2;
           // }
-          alert(patientInfo.gender)
+          // alert(patientInfo.gender)
 
           const response = await axios.post(
             "https://clinicmanagement20240427220332.azurewebsites.net/api/Authentication/RegisterPatient",
@@ -100,7 +100,7 @@ const AddPatient = ({ handleClose, show, addPatient }) => {
               password: patientInfo.password,
               phoneNumber: patientInfo.phone,
               gender: parseInt(patientInfo.gender),
-              doctorId: 9,
+              doctorId: '',
             },
             {
               headers: {
