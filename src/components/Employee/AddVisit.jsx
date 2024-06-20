@@ -81,64 +81,88 @@ const AddVisit = ({ handleClose, show, selectedPatientId, selectedPatient}) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // New visit
-    try {
-      console.log("Access Token is: ", accessToken);
-      // console.log("Warini hnaaa: ", visitInfo);
 
-      // Determine age group based on selectedPatient[2]
-      let ageGroup;
-      const patientAge = selectedPatient[2];
-      if (patientAge >= 0 && patientAge <= 40) {
-        ageGroup = 0;
-      } else if (patientAge >= 41 && patientAge <= 60) {
-        ageGroup = 1;
-      } else {
-        ageGroup = 2;
-      }
+    if (visitInfo.tobaccoUse === 0 || visitInfo.alcoholConsumption === 0) {
+      alert("Please make sure you make a choice for both tobacco use and alcohol consumption.");
+    } else if (!visitInfo.microscopicImagePath || !visitInfo.stainingImagePath) {
+      alert("Please enter the images url");
+    } else if(visitInfo.assignedDoctorId === 0){
+      alert("Please assign a doctor to this patient.");
+    } else {
+      // New visit
+      try {
+        console.log("Access Token is: ", accessToken);
+        // console.log("Warini hnaaa: ", visitInfo);
 
-      const response = await axios.post(
-        "https://clinicmanagement20240427220332.azurewebsites.net/api/Visits/CreatePatientVisit",
-        {
-          date: new Date().toISOString(),
-          patientId: selectedPatient[0],
-          doctorId: visitInfo.assignedDoctorId,
-          patientData: {
-            gender: selectedPatient[1],
-            localization: visitInfo.localization,
-            aiDiagnosis: visitInfo.diagnosis, 
-            tobaccoUse: visitInfo.tobaccoUse,
-            alcoholConsumption: visitInfo.alcoholConsumption,
-            ageGroup:ageGroup,
-            stainingImagePath: visitInfo.stainingImagePath,
-            microscopicImagePath: visitInfo.microscopicImagePath,
-            doctorComment: visitInfo.doctorComment,
-          },
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
+
+
+        // Determine age group based on selectedPatient[2]
+        let ageGroup;
+        const patientAge = selectedPatient[2];
+        if (patientAge >= 0 && patientAge <= 40) {
+          ageGroup = 0;
+        } else if (patientAge >= 41 && patientAge <= 60) {
+          ageGroup = 1;
+        } else {
+          ageGroup = 2;
         }
-      );
 
-      console.log("New Visit Added Successfully!", response.data);
-      // Add the new visit to the selected patient
-      // handleNewVisit(selectedPatientId, newVisit);
-      handleClose();
-    } catch (error) {
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        console.error("Visit Add Error:", error.response.data);
-        console.error("Status:", error.response.status);
-        console.error("Validation Errors:", error.response.data.errors);
-      } else if (error.request) {
-        // The request was made but no response was received
-        console.error("Network Error:", error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        console.error("Error:", error.message);
+
+        let genderPUT;
+        const patientGen = selectedPatient[1];
+        if (patientGen === 'Female') {
+          genderPUT = 0;
+        } else if (patientGen === 'Male') {
+          genderPUT = 1;
+        } else {
+          genderPUT = 2;
+        }
+
+        
+        const response = await axios.post(
+          "https://clinicmanagement20240427220332.azurewebsites.net/api/Visits/CreatePatientVisit",
+          {
+            date: new Date().toISOString(),
+            patientId: selectedPatient[0],
+            doctorId: visitInfo.assignedDoctorId,
+            patientData: {
+              gender: genderPUT,
+              localization: visitInfo.localization,
+              aiDiagnosis: visitInfo.diagnosis, 
+              tobaccoUse: visitInfo.tobaccoUse,
+              alcoholConsumption: visitInfo.alcoholConsumption,
+              ageGroup:ageGroup,
+              stainingImagePath: visitInfo.stainingImagePath,
+              microscopicImagePath: visitInfo.microscopicImagePath,
+              doctorComment: visitInfo.doctorComment,
+            },
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+
+        console.log("New Visit Added Successfully!", response.data);
+        // Add the new visit to the selected patient
+        // handleNewVisit(selectedPatientId, newVisit);
+        handleClose();
+      } catch (error) {
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.error("Visit Add Error:", error.response.data);
+          console.error("Status:", error.response.status);
+          console.error("Validation Errors:", error.response.data.errors);
+          alert("Please make sure you make a choice for both tobacco use and alcohol consumption.");
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.error("Network Error:", error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.error("Error:", error.message);
+        }
       }
     }
   };
@@ -203,7 +227,7 @@ const AddVisit = ({ handleClose, show, selectedPatientId, selectedPatient}) => {
                 onChange={handleInputChange}
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-400"
               >
-                <option value='0'>Not Informed</option>
+                {/* <option value='0'>Not Informed</option> */}
                 <option value='1'>Former</option>
                 <option value='2'>No</option>
                 <option value='3'>Yes</option>
@@ -220,7 +244,7 @@ const AddVisit = ({ handleClose, show, selectedPatientId, selectedPatient}) => {
                 onChange={handleInputChange}
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-400"
               >
-                <option value='0'>Not Informed</option>
+                {/* <option value='0'>Not Informed</option> */}
                 <option value='1'>Former</option>
                 <option value='2'>No</option>
                 <option value='3'>Yes</option>
@@ -272,7 +296,7 @@ const AddVisit = ({ handleClose, show, selectedPatientId, selectedPatient}) => {
                 onChange={handleInputChange}
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-400"
               >
-                <option value="">Select doctor</option>
+                <option value = '0'>Select doctor</option>
                 {/* Iterate over doctors and render an option for each */}
                 {doctors.map((doctor) => (
                   <option key={doctor.id} value={doctor.id}>
