@@ -68,3 +68,49 @@ h2 {
   align-items: center;
   justify-content: space-between;
 }
+
+@media (max-width: 768px) {
+  .page-container {
+    margin: 10px 2px; /* Add small margin on left and right */
+  }
+
+  .VisitList {
+    width: calc(100% - 4px); /* Full width minus margins */
+    padding: 10px;
+    border-radius: 10px;
+    min-height: auto; /* Adjust height for mobile */
+  }
+
+  .VisitList li {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+  }
+
+  .VisitItem {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .VisitDate {
+    font-weight: bold;
+    margin-bottom: 5px; /* Add margin for spacing */
+  }
+
+  .ViewButton {
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+  }
+
+  .VisitDetails {
+    margin-top: 10px;
+    padding-left: 10px;
+    border-left: 2px solid #a46ede;
+  }
+
+  .row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

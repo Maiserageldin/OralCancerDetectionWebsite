@@ -9,7 +9,7 @@ const AddDoctor = ({ handleClose, show, addDoctor }) => {
   const { accessToken } = useContext(AccessTokenContext);
   // console.log("Access Token from AddDoctor is: ", accessToken);
 
-  console.log("Access Token1 is: ", accessToken);
+  //console.log("Access Token1 is: ", accessToken);
   const [doctorInfo, setDoctorInfo] = useState({
     name: "",
     email: "",

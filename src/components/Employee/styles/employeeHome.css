@@ -182,9 +182,9 @@
 
 .view-visits-btn {
   position: absolute;
-  bottom: 5px; 
+  bottom: 5px;
   right: 10px; /* Adjusted right position */
-  background-color: #a46ede; 
+  background-color: #a46ede;
   color: white;
   border: none;
   padding: 5px 10px;
@@ -196,7 +196,7 @@
 }
 
 .view-visits-btn:hover {
-  background-color: blueviolet; 
+  background-color: blueviolet;
 }
 
 /* Style for the modal */

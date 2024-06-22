@@ -20,8 +20,6 @@ function Doctordashboard1() {
   const { usernameResponse } = loc.state || {};
   const navigate = useNavigate();
 
-  console.log('username', usernameResponse);
-
   useEffect(() => {
     const fetchPatients = async () => {
       try {
@@ -34,7 +32,9 @@ function Doctordashboard1() {
           }
         );
 
+        console.log("Response", response);
         const assignedPatients = response.data.data.assignedPatients;
+
         const patientsArray = assignedPatients.map((patientDB) => ({
           id: patientDB.id,
           name: patientDB.fullName,
@@ -79,7 +79,9 @@ function Doctordashboard1() {
     } else if (patientFilterBy === "phone") {
       return patient.phone.toLowerCase().includes(patientFilter.toLowerCase());
     } else if (patientFilterBy === "username") {
-      return patient.username.toLowerCase().includes(patientFilter.toLowerCase());
+      return patient.username
+        .toLowerCase()
+        .includes(patientFilter.toLowerCase());
     } else if (patientFilterBy === "age") {
       return patient.age.toString().includes(patientFilter);
     } else if (patientFilterBy === "gender") {
@@ -160,8 +162,8 @@ function Doctordashboard1() {
                     </div>
                     {patient.showDetails && (
                       <div className="details">
-                        <p>Email: {patient.email}</p>
-                        <p>Phone: {patient.phone}</p>
+                        {/* <p>Email: {patient.email}</p> */}
+                        {/* <p>Phone: {patient.phone}</p> */}
                         <p>Username: {patient.username}</p>
                         <p>Age: {patient.age}</p>
                         <p>Gender: {patient.gender}</p>
