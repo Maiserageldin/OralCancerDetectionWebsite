@@ -82,9 +82,7 @@ const AddVisit = ({ handleClose, show, selectedPatientId, selectedPatient}) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (visitInfo.tobaccoUse === 0 || visitInfo.alcoholConsumption === 0) {
-      alert("Please make sure you make a choice for both tobacco use and alcohol consumption.");
-    } else if (!visitInfo.microscopicImagePath || !visitInfo.stainingImagePath) {
+    if (!visitInfo.microscopicImagePath || !visitInfo.stainingImagePath) {
       alert("Please enter the images url");
     } else if(visitInfo.assignedDoctorId === 0){
       alert("Please assign a doctor to this patient.");
