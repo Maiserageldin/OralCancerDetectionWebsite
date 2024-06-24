@@ -153,7 +153,6 @@ const AddVisit = ({ handleClose, show, selectedPatientId, selectedPatient}) => {
           console.error("Visit Add Error:", error.response.data);
           console.error("Status:", error.response.status);
           console.error("Validation Errors:", error.response.data.errors);
-          alert("Please make sure you make a choice for both tobacco use and alcohol consumption.");
         } else if (error.request) {
           // The request was made but no response was received
           console.error("Network Error:", error.request);
