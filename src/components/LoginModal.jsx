@@ -100,6 +100,9 @@ const LoginModal = ({ handleClose, show }) => {
         // Default case or error handling
         console.error("Unknown role");
         navigate("/error");
+        // Default case or error handling
+        console.error("Unknown role");
+        navigate("/error");
       }
 
       // Navigate to patient dashboard
