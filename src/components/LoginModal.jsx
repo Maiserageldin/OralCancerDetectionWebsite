@@ -64,13 +64,21 @@ const LoginModal = ({ handleClose, show }) => {
       console.log("roles", roles);
       console.log("username retrieved", usernameResponse);
 
-      if (username.startsWith("p_")) {
-        navigate("/patient", { state: { usernameResponse } });
-      } else if (username.startsWith("d_")) {
-        navigate("/doctor", { state: { usernameResponse } });
+      if (roles.includes("View_Patient_Visits") && roles.length === 1) {
+        // Patient
+        navigate("/patient", { state: { usernameResponse: response } });
+      } else if (roles.includes("Edit_Patient_Visits")) {
+        // Doctor
+        navigate("/doctor", { state: { usernameResponse: response } });
+      } else if (roles.includes("View_All_Visits")) {
+        // Employee
+        navigate("/employee", { state: { usernameResponse: response } });
       } else {
-        navigate("/employee", { state: { usernameResponse } });
+        // Default case or error handling
+        console.error("Unknown role");
+        navigate("/error");
       }
+
       // Navigate to patient dashboard
       // if (roles?.includes("Patient")) {
       //   // history.push("/patient");
