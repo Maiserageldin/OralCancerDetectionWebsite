@@ -1,6 +1,4 @@
-/* Base styles for desktop view remain unchanged */
 
-/* Base styles */
 .employee-dashboard .option {
   cursor: pointer;
   padding-left: 20px;
@@ -180,9 +178,9 @@
   background-color: blueviolet;
 }
 
-.view-visits-btn {
+.employee-dashboard .view-visits-btn {
   position: absolute;
-  bottom: 5px;
+  bottom: 10px; /* Adjusted bottom position */
   right: 10px; /* Adjusted right position */
   background-color: #a46ede;
   color: white;
@@ -191,13 +189,15 @@
   font-size: 14px;
   cursor: pointer;
   border-radius: 5px;
-  margin-right: 10px;
   z-index: 1; /* Ensure it stays above content */
+  margin-right: 10px;
 }
 
-.view-visits-btn:hover {
+.employee-dashboard .view-visits-btn:hover {
   background-color: blueviolet;
 }
+
+
 
 /* Style for the modal */
 .modal {
@@ -308,11 +308,14 @@
     padding: 15px;
   }
 
-  .view-visits-btn {
-    bottom: 10px;
-    right: 10px;
+  .employee-dashboard .view-visits-btn {
+    /* bottom: auto; */
+    left: auto;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    padding: 8px 12px;
     font-size: 12px;
-    padding: 3px 8px;
+    width: 30%;
   }
 
   .visits-list-container {
