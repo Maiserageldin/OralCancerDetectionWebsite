@@ -51,27 +51,57 @@ const LoginModal = ({ handleClose, show }) => {
       console.log("Access Token", accessToken);
 
       handleClose();
+
       const decodedData = jwtDecode(accessToken);
       console.log("decodedData", decodedData);
-      const roles =
+
+      let roles =
         decodedData?.[
           "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
         ];
+
       const usernameResponse =
         decodedData?.[
           "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
         ];
+
       //console.log("accessToken", response.data?.accessToken);
       console.log("roles", roles);
       console.log("username retrieved", usernameResponse);
 
-      if (username.startsWith("p_")) {
+      // if (username.startsWith("p_")) {
+      //   navigate("/patient", { state: { usernameResponse } });
+      // } else if (username.startsWith("d_")) {
+      //   navigate("/doctor", { state: { usernameResponse } });
+      // } else {
+      //   navigate("/employee", { state: { usernameResponse } });
+      // }
+
+      // Ensure roles is an array
+      // Convert roles to an array if it's not already
+      if (!Array.isArray(roles)) {
+        roles = [roles];
+      }
+
+      // Add detailed debug logging
+      console.log("Roles array length:", roles.length);
+      roles.forEach((role, index) => console.log(`Role ${index}: ${role}`));
+
+      if (roles.length === 1 && roles.includes("View_Patient_Visits")) {
         navigate("/patient", { state: { usernameResponse } });
-      } else if (username.startsWith("d_")) {
+      } else if (roles.includes("Register_Employee")) {
+        navigate("/employee", { state: { usernameResponse } });
+      } else if (
+        roles.includes("View_Assigned_Patients") ||
+        roles.includes("Edit_Patient_Visits")
+      ) {
         navigate("/doctor", { state: { usernameResponse } });
       } else {
-        navigate("/employee", { state: { usernameResponse } });
+        // Default case or error handling
+        console.error("Unknown role");
+        navigate("/error");
       }
+
       // Navigate to patient dashboard
       // if (roles?.includes("Patient")) {
       //   // history.push("/patient");
