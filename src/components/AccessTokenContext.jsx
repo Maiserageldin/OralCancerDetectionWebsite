@@ -1,16 +1,39 @@
-import React, { createContext, useState } from "react";
+import React, { useState, useEffect } from "react";
 
-export const AccessTokenContext = createContext();
+const AccessTokenContext = React.createContext();
 
-export const AccessTokenProvider = ({ children }) => {
-  const [accessToken, setAccessToken] = useState(null);
-  const [doctorId, setDoctorId] = useState(null);
+const AccessTokenProvider = ({ children }) => {
+  const [accessToken, setAccessToken] = useState(
+    localStorage.getItem("accessToken")
+  );
+  const [doctorId, setDoctorId] = useState(localStorage.getItem("userId"));
+
+  useEffect(() => {
+    if (accessToken) {
+      localStorage.setItem("accessToken", accessToken);
+    } else {
+      localStorage.removeItem("accessToken");
+    }
+
+    if (doctorId) {
+      localStorage.setItem("userId", doctorId);
+    } else {
+      localStorage.removeItem("userId");
+    }
+  }, [accessToken, doctorId]);
 
   return (
     <AccessTokenContext.Provider
-      value={{ accessToken, setAccessToken, doctorId, setDoctorId }}
+      value={{
+        accessToken,
+        setAccessToken,
+        doctorId,
+        setDoctorId,
+      }}
     >
       {children}
     </AccessTokenContext.Provider>
   );
 };
+
+export { AccessTokenProvider, AccessTokenContext };

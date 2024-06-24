@@ -44,6 +44,7 @@ const LoginModal = ({ handleClose, show }) => {
       const { accessToken, id } = response.data;
       setAccessToken(accessToken);
       setDoctorId(id);
+      localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("userId", id); // Store the id in localStorage
 
       //console.log("id", id);

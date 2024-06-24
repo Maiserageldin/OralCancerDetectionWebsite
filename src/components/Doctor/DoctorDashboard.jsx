@@ -21,6 +21,12 @@ function Doctordashboard1() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!accessToken) {
+      // Handle missing access token, e.g., redirect to login
+      console.error("Access token is missing");
+      return;
+    }
+
     const fetchPatients = async () => {
       try {
         const response = await axios.get(
@@ -40,8 +46,8 @@ function Doctordashboard1() {
           name: patientDB.fullName,
           age: patientDB.age,
           email: patientDB.email,
-          phone: patientDB.phone,
-          username: patientDB.username,
+          phone: patientDB.phoneNumber,
+          username: patientDB.userName,
           gender: patientDB.gender,
         }));
 
@@ -162,8 +168,8 @@ function Doctordashboard1() {
                     </div>
                     {patient.showDetails && (
                       <div className="details">
-                        {/* <p>Email: {patient.email}</p> */}
-                        {/* <p>Phone: {patient.phone}</p> */}
+                        <p>Email: {patient.email}</p>
+                        <p>Phone: {patient.phone}</p>
                         <p>Username: {patient.username}</p>
                         <p>Age: {patient.age}</p>
                         <p>Gender: {patient.gender}</p>

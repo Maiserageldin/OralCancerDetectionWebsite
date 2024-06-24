@@ -7,7 +7,7 @@ import axios from "axios";
 import { AccessTokenContext } from "../AccessTokenContext.jsx";
 
 function PatientRecordContainer({ patientID }) {
-  const [isPopupOpen, setPopupOpen] = useState(false);
+  //const [isPopupOpen, setPopupOpen] = useState(false);
   const [comment, setComment] = useState("");
   const [latestComment, setLatestComment] = useState("");
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -15,6 +15,7 @@ function PatientRecordContainer({ patientID }) {
   const [patientData, setPatientData] = useState(null);
   const [visitId, setVisitId] = useState(null);
   const { accessToken } = useContext(AccessTokenContext);
+  const [newCommentText, setNewCommentText] = useState("");
 
   useEffect(() => {
     const storedVisitId = localStorage.getItem("visitId");
@@ -25,13 +26,6 @@ function PatientRecordContainer({ patientID }) {
   }, []);
 
   useEffect(() => {
-    // if (!userId) {
-    //   userId = localStorage.getItem("userId");
-    // }
-
-    // console.log("Main Access Token: ", accessToken);
-    // console.log("User Id ", userId);
-
     const fetchPatientData = async () => {
       try {
         console.log("Fetching patient data...");
@@ -45,7 +39,15 @@ function PatientRecordContainer({ patientID }) {
         );
         console.log("Patient data fetched:", response.data);
         const data = response.data.data;
-
+        // if (data.length > 0) {
+        //   console.log("Visits Data:");
+        //   data.forEach((visit) => {
+        //     console.log("Visit Number:", visit.visitNumber);
+        //     // You can perform further operations with each visit object here
+        //   });
+        // } else {
+        //   console.log("No visit data found.");
+        // }
         const patientRecordArray = data.map((visitsDB) => {
           let specialityName;
           let ageGroup;
@@ -160,7 +162,7 @@ function PatientRecordContainer({ patientID }) {
           return {
             id: visitsDB.id.toString(), // Ensure id is a string
             visitNumber: visitsDB.visitNumber,
-            name:visitsDB.patientName,
+            name: visitsDB.patientName,
             date: new Date(visitsDB.date).toISOString().split("T")[0],
             ageGroup: ageGroup,
             gender: gender,
@@ -222,11 +224,36 @@ function PatientRecordContainer({ patientID }) {
     }
   };
 
-  const handleSaveComment = (newComment) => {
-    console.log("Saving new comment:", newComment);
-    setComment(newComment);
-    setLatestComment(newComment);
-    setPopupOpen(false);
+  const handleSaveComment = async () => {
+    try {
+      console.log("Saving new comment:", newCommentText); // Log new comment text
+
+      // Retrieve visitId from localStorage
+      const storedVisitId = localStorage.getItem("visitId");
+
+      // Make PUT request to update doctor comment
+      const response = await axios.put(
+        `https://clinicmanagement20240427220332.azurewebsites.net/api/visits/DoctorComment/VisitID/${storedVisitId}`,
+        {
+          doctorComment: newCommentText,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      console.log("PUT request response:", response.data);
+
+      // Update latest comment in state upon successful request
+      setLatestComment(newCommentText);
+
+      // setPopupOpen(false); // Close comment popup if needed
+    } catch (error) {
+      console.error("Error saving comment:", error);
+      // Handle error state or display error message to user
+    }
   };
 
   if (!patientData) {
@@ -289,7 +316,14 @@ function PatientRecordContainer({ patientID }) {
         </div>
         <div>
           <h1>Doctor Comment</h1>
-          <p>{patientData.doctorComment || "No comment available"}</p>
+          <input
+            type="text"
+            value={newCommentText}
+            onChange={(e) => setNewCommentText(e.target.value)}
+            placeholder="Enter your comment"
+          />
+          <button onClick={handleSaveComment}>Save Comment</button>
+          {/* <p>{patientData.doctorComment || "No comment available"}</p> */}
         </div>
       </div>
     </div>
