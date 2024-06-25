@@ -8,6 +8,19 @@ const AddVisit = ({ handleClose, show, selectedPatientId, selectedPatient}) => {
   const { accessToken } = useContext(AccessTokenContext);
   const [doctors, setDoctors] = useState([]);
 
+  const tobaccoUseMap = {
+    'Not Informed': 0,
+    'Former': 1,
+    'No': 2,
+    'Yes': 3,
+  };
+
+  const alcoholConsumptionMap = {
+    'Not Informed': 0,
+    'Former': 1,
+    'No': 2,
+    'Yes': 3,
+  };
 
   const [visitInfo, setVisitInfo] = useState({
     localization: 0,
@@ -82,6 +95,10 @@ const AddVisit = ({ handleClose, show, selectedPatientId, selectedPatient}) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    const mappedTobaccoUse = tobaccoUseMap[visitInfo.tobaccoUse];
+    const mappedalcoholConsumption = alcoholConsumptionMap[visitInfo.alcoholConsumption]
+
+
     if (!visitInfo.microscopicImagePath || !visitInfo.stainingImagePath) {
       alert("Please enter the images url");
     } else if(visitInfo.assignedDoctorId === 0){
@@ -90,7 +107,6 @@ const AddVisit = ({ handleClose, show, selectedPatientId, selectedPatient}) => {
       // New visit
       try {
         console.log("Access Token is: ", accessToken);
-        // console.log("Warini hnaaa: ", visitInfo);
 
 
 
@@ -116,7 +132,6 @@ const AddVisit = ({ handleClose, show, selectedPatientId, selectedPatient}) => {
           genderPUT = 2;
         }
 
-        
         const response = await axios.post(
           "https://clinicmanagement20240427220332.azurewebsites.net/api/Visits/CreatePatientVisit",
           {
@@ -127,8 +142,8 @@ const AddVisit = ({ handleClose, show, selectedPatientId, selectedPatient}) => {
               gender: genderPUT,
               localization: visitInfo.localization,
               aiDiagnosis: visitInfo.diagnosis, 
-              tobaccoUse: visitInfo.tobaccoUse,
-              alcoholConsumption: visitInfo.alcoholConsumption,
+              tobaccoUse: mappedTobaccoUse,
+              alcoholConsumption: mappedalcoholConsumption,
               ageGroup:ageGroup,
               stainingImagePath: visitInfo.stainingImagePath,
               microscopicImagePath: visitInfo.microscopicImagePath,
@@ -146,6 +161,8 @@ const AddVisit = ({ handleClose, show, selectedPatientId, selectedPatient}) => {
         // Add the new visit to the selected patient
         // handleNewVisit(selectedPatientId, newVisit);
         handleClose();
+        // Reload the page after successfully adding a visit
+        window.location.reload();
       } catch (error) {
         if (error.response) {
           // The request was made and the server responded with a status code
@@ -224,7 +241,7 @@ const AddVisit = ({ handleClose, show, selectedPatientId, selectedPatient}) => {
                 onChange={handleInputChange}
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-400"
               >
-                {/* <option value='0'>Not Informed</option> */}
+                <option value='0'>Not Informed</option>
                 <option value='1'>Former</option>
                 <option value='2'>No</option>
                 <option value='3'>Yes</option>
@@ -241,7 +258,7 @@ const AddVisit = ({ handleClose, show, selectedPatientId, selectedPatient}) => {
                 onChange={handleInputChange}
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-400"
               >
-                {/* <option value='0'>Not Informed</option> */}
+                <option value='0'>Not Informed</option>
                 <option value='1'>Former</option>
                 <option value='2'>No</option>
                 <option value='3'>Yes</option>
