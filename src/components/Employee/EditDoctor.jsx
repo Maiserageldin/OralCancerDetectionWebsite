@@ -123,15 +123,22 @@ const EditDoctor = ({ handleClose, show, doctor, saveDoctor }) => {
           // that falls out of the range of 2xx
           console.error("Doctor Edit Error:", error.response.data);
           console.error("Status:", error.response.status);
-          console.error("Validation Errors:", error.response.data.errors);
-        } else if (error.request) {
+
+          // Check if error message indicates username already taken
+          if (error.response.data.message === 'Failed To Edit User') {
+            alert("Username already taken. Please choose a different username.");
+          } else {
+            // Handle other errors here if needed
+            console.error("Validation Errors:", error.response.data.errors);
+          }
+          } else if (error.request) {
           // The request was made but no response was received
           console.error("Network Error:", error.request);
-        } else {
+          } else {
           // Something happened in setting up the request that triggered an Error
           console.error("Error:", error.message);
-        }
-      }
+          }
+          }
     } else {
       alert("Please fill in all fields");
     }
