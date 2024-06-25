@@ -54,16 +54,53 @@ const AddPatient = ({ handleClose, show, addPatient }) => {
   }
 
 
-    if (
-      patientInfo.name &&
-      patientInfo.email &&
-      patientInfo.phone &&
-      patientInfo.username &&
-      patientInfo.password &&
-      patientInfo.age &&
-      patientInfo.gender
-    ) {
-      if (patientInfo.username.startsWith("p_")) {
+  if (
+    patientInfo.name &&
+    patientInfo.email &&
+    patientInfo.phone &&
+    patientInfo.username &&
+    patientInfo.password &&
+    patientInfo.age &&
+    patientInfo.gender
+  ) {
+    
+
+      
+      try {
+        console.log("Access Token is: ", accessToken);
+
+        // let ageGroup;
+        // const patientAge = parseInt(patientInfo.age);
+        // if (patientAge >= 0 && patientAge <= 40) {
+        //   ageGroup = 0;
+        // } else if (patientAge >= 41 && patientAge <= 60) {
+        //   ageGroup = 1;
+        // } else {
+        //   ageGroup = 2;
+        // }
+        // alert(patientInfo.gender)
+
+        const response = await axios.post(
+          "https://clinicmanagement20240427220332.azurewebsites.net/api/Authentication/RegisterPatient",
+          {
+            fullName: patientInfo.name,
+            userName: patientInfo.username,
+            age: patientInfo.age,
+            email: patientInfo.email,
+            password: patientInfo.password,
+            phoneNumber: patientInfo.phone,
+            gender: parseInt(patientInfo.gender),
+            doctorId: '',
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+  
+        console.log("Patient Added Successfully!", response.data);
+
         addPatient(patientInfo);
         setPatientInfo({
           name: "",
@@ -75,61 +112,36 @@ const AddPatient = ({ handleClose, show, addPatient }) => {
           gender: '0'
         });
 
-        
-        try {
-          console.log("Access Token is: ", accessToken);
+        // Reload the page
+        window.location.reload();
 
-          // let ageGroup;
-          // const patientAge = parseInt(patientInfo.age);
-          // if (patientAge >= 0 && patientAge <= 40) {
-          //   ageGroup = 0;
-          // } else if (patientAge >= 41 && patientAge <= 60) {
-          //   ageGroup = 1;
-          // } else {
-          //   ageGroup = 2;
-          // }
-          // alert(patientInfo.gender)
+      } catch (error) {
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.error("Patient Add Error:", error.response.data);
+          console.error("Status:", error.response.status);
 
-          const response = await axios.post(
-            "https://clinicmanagement20240427220332.azurewebsites.net/api/Authentication/RegisterPatient",
-            {
-              fullName: patientInfo.name,
-              userName: patientInfo.username,
-              age: patientInfo.age,
-              email: patientInfo.email,
-              password: patientInfo.password,
-              phoneNumber: patientInfo.phone,
-              gender: parseInt(patientInfo.gender),
-              doctorId: '',
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
-          );
-    
-          console.log("Patient Added Successfully!", response.data);
-        } catch (error) {
-          if (error.response) {
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
-            console.error("Patient Add Error:", error.response.data);
-            console.error("Status:", error.response.status);
-            console.error("Validation Errors:", error.response.data.errors);
-          } else if (error.request) {
-            // The request was made but no response was received
-            console.error("Network Error:", error.request);
+
+          // Check if error message contains the substring "Username 'xxx' is already taken."
+          const errorMessage = error.response.data.message;
+          if (errorMessage.includes("Username")) {
+            alert("Username already taken. Please choose a different username.");
           } else {
-            // Something happened in setting up the request that triggered an Error
-            console.error("Error:", error.message);
+            // Handle other errors here if needed
+            console.error("Validation Errors:", error.response.data.errors);
           }
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.error("Network Error:", error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.error("Error:", error.message);
         }
-
-
-      } else {
-        alert("Username must start with 'p_'");
       }
+
+
+      
 
     } else {
       alert("Please fill in all fields");
@@ -205,7 +217,6 @@ const AddPatient = ({ handleClose, show, addPatient }) => {
                   className="block text-gray-700 font-bold mb-2"
                 >
                   Username
-                  <span className="text-xs text-gray-500 ml-1">(start with "p_")</span>
                 </label>
                 <input
                   id="pusername"
