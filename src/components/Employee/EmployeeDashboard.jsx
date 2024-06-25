@@ -40,6 +40,7 @@ function EmployeeDashboard() {
   const [showAddVisitForm, setShowAddVisitForm] = useState(false);
   const [selectedPatientId, setSelectedPatientId] = useState(null);
   const [selectedPatientName, setSelectedPatientName] = useState(null);
+  const [visitsLoading, setVisitsLoading] = useState(null);
   const [selectedPatient, setSelectedPatient] = useState(null);
   // const [showVisitModal, setShowVisitModal] = useState(false);
   const [doctors, setDoctors] = useState([]);
@@ -226,6 +227,8 @@ function EmployeeDashboard() {
   const handleViewVisits = async (patientId, patientName) => {
     setShowViewVisitsModal(true);
     setSelectedPatientName(patientName);
+    setVisitsLoading(true); // Set loading state to true initially
+
 
     try {
       const response = await axios.get(
@@ -369,9 +372,11 @@ function EmployeeDashboard() {
 
       // Set the state variable with the fetched data
       setVisits(visitsArray);
-      console.log("All Visits for patient", patientId, "are:", visitsArray);
+      setVisitsLoading(false); // Set loading state to false after data is fetched
+      console.log("All Visits for patient", patientId, "are:", data);
     } catch (error) {
       console.error("Error:", error);
+      setVisitsLoading(false); // Set loading state to false on error
     }
   };
 
@@ -507,7 +512,8 @@ function EmployeeDashboard() {
         );
 
         console.log("Patient Deleted Successfully!");
-        // Optionally, you can handle response data if needed
+        // Reload the page
+        window.location.reload();
         console.log("Response Data:", response.data);
       } catch (error) {
         if (error.response) {
@@ -792,6 +798,7 @@ function EmployeeDashboard() {
       <ViewVisitsModal
         handleClose={handleCloseViewVisitsModal}
         show={showViewVisitsModal}
+        loading={visitsLoading}
         visits={visits}
         selectedPatientName={selectedPatientName}
       />
