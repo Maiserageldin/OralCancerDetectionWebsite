@@ -264,6 +264,10 @@
   border-bottom: 1px solid #ccc;
 }
 
+.model-prediction-btn {
+  margin-top: 10px;
+}
+
 /* Media Queries for Mobile Responsiveness */
 @media (max-width: 768px) {
   .employee-dashboard .content {
@@ -322,7 +326,23 @@
     max-width: 100%;
   }
 
+  
   .viewVisitsmodal-main {
     width: 90%;
+    max-width: none;
   }
+
+  .viewVisitsclose-btn {
+    width: 20%;
+    right: 0px;
+  }
+
+
+  .employee-dashboard .patient-list li .item img,
+  .employee-dashboard .doctor-list li .item img {
+    width: 20px;
+    height: 20px;
+  }
+
+
 }
