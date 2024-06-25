@@ -81,7 +81,41 @@ const AddDoctor = ({ handleClose, show, addDoctor }) => {
       doctorInfo.gender &&
       doctorInfo.specialty
     ) {
-      if (doctorInfo.username.startsWith("d_")) {
+      
+      try {
+        console.log("Access Token is: ", accessToken);
+
+        // let ageGroup;
+        // const doctorAge = parseInt(doctorInfo.age);
+        // if (doctorAge >= 0 && doctorAge <= 40) {
+        //   ageGroup = 0;
+        // } else if (doctorAge >= 41 && doctorAge <= 60) {
+        //   ageGroup = 1;
+        // } else {
+        //   ageGroup = 2;
+        // }
+
+        const response = await axios.post(
+          "https://clinicmanagement20240427220332.azurewebsites.net/api/Authentication/RegisterDoctor",
+          {
+            fullName: doctorInfo.name,
+            userName: doctorInfo.username,
+            age: doctorInfo.age,
+            email: doctorInfo.email,
+            password: doctorInfo.password,
+            phoneNumber: doctorInfo.phone,
+            gender: parseInt(doctorInfo.gender),
+            speciality: parseInt(doctorInfo.specialty),
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+
+        console.log("Doctor Added Successfully!", response.data);
+
         addDoctor(doctorInfo);
         setDoctorInfo({
           name: "",
@@ -93,58 +127,36 @@ const AddDoctor = ({ handleClose, show, addDoctor }) => {
           gender: "0",
           specialty: "0",
         });
+  
+        // Reload the page
+        window.location.reload();
 
-        try {
-          console.log("Access Token is: ", accessToken);
 
-          // let ageGroup;
-          // const doctorAge = parseInt(doctorInfo.age);
-          // if (doctorAge >= 0 && doctorAge <= 40) {
-          //   ageGroup = 0;
-          // } else if (doctorAge >= 41 && doctorAge <= 60) {
-          //   ageGroup = 1;
-          // } else {
-          //   ageGroup = 2;
-          // }
+      } catch (error) {
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.error("Doctor Add Error:", error.response.data);
+          console.error("Status:", error.response.status);
 
-          const response = await axios.post(
-            "https://clinicmanagement20240427220332.azurewebsites.net/api/Authentication/RegisterDoctor",
-            {
-              fullName: doctorInfo.name,
-              userName: doctorInfo.username,
-              age: doctorInfo.age,
-              email: doctorInfo.email,
-              password: doctorInfo.password,
-              phoneNumber: doctorInfo.phone,
-              gender: parseInt(doctorInfo.gender),
-              speciality: parseInt(doctorInfo.specialty),
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
-          );
 
-          console.log("Doctor Added Successfully!", response.data);
-        } catch (error) {
-          if (error.response) {
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
-            console.error("Doctor Add Error:", error.response.data);
-            console.error("Status:", error.response.status);
-            console.error("Validation Errors:", error.response.data.errors);
-          } else if (error.request) {
-            // The request was made but no response was received
-            console.error("Network Error:", error.request);
+          // Check if error message contains the substring "Username 'xxx' is already taken."
+          const errorMessage = error.response.data.message;
+          if (errorMessage.includes("Username")) {
+            alert("Username already taken. Please choose a different username.");
           } else {
-            // Something happened in setting up the request that triggered an Error
-            console.error("Error:", error.message);
+            // Handle other errors here if needed
+            console.error("Validation Errors:", error.response.data.errors);
           }
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.error("Network Error:", error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.error("Error:", error.message);
         }
-      } else {
-        alert("Username must start with 'd_'");
       }
+    
     } else {
       alert("Please fill in all fields");
     }
@@ -240,9 +252,6 @@ const AddDoctor = ({ handleClose, show, addDoctor }) => {
                 className="block text-gray-700 font-bold mb-2"
               >
                 Username
-                <span className="text-xs text-gray-500 ml-1">
-                  (start with "d_")
-                </span>
               </label>
               <input
                 id="username"
