@@ -6,6 +6,9 @@ const DetailedVisitModal = ({ handleClose, show, visit }) => {
   const { accessToken } = useContext(AccessTokenContext);
   const [doctors, setDoctors] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
+  const [assignedD, setAssignedD] = useState(`${visit.doctorName} - ${visit.speciality}`);
+
+  
 
   const [visitInfo, setVisitInfo] = useState({
     localization: visit.localization,
@@ -17,7 +20,7 @@ const DetailedVisitModal = ({ handleClose, show, visit }) => {
     doctorComment: visit.doctorComment,
     doctorName: visit.doctorName,
     speciality: visit.speciality,
-    assignedDoctorId: visit.assignedDoctorId,
+    assignedDoctorId: 0,
   });
 
   useEffect(() => {
@@ -39,18 +42,45 @@ const DetailedVisitModal = ({ handleClose, show, visit }) => {
           name: doctorDB.fullName_Speciality,
         }));
 
+
         // Set the state variable with the fetched data
         setDoctors(doctorsArray);
+
+
+        // Use a for loop to find the doctor whose name matches the normalized assignedD
+        const normalizedAssignedD = assignedD.replace(/_/g, ' ');
+        let getAssignedDoctorId = 0; // Default to 0 if no match is found
+        for (let i = 0; i < doctorsArray.length; i++) {
+          // Normalize the doctor's name by replacing underscores with spaces and removing "and"
+          const normalizedDoctorName = doctorsArray[i].name.replace(/_/g, ' ');
+
+          // Remove "and" from both normalized strings
+          const normalizedAssignedDWithoutAnd = normalizedAssignedD.replace(/\band\b/gi, '').replace(/\s+/g, ' ').trim();
+          const normalizedDoctorNameWithoutAnd = normalizedDoctorName.replace(/\band\b/gi, '').replace(/\s+/g, ' ').trim();
+
+          if (normalizedDoctorNameWithoutAnd === normalizedAssignedDWithoutAnd) {
+            getAssignedDoctorId = doctorsArray[i].id;
+            visitInfo.assignedDoctorId = getAssignedDoctorId;
+            break; // Exit the loop once a match is found
+          }
+        }
+
+
+
         console.log("Doctor's dropdown: ", doctorsArray);
+        
       } catch (error) {
         console.error("Error:", error);
       }
     };
 
     fetchDoctors();
-  }, [accessToken]);
+  }, [accessToken, assignedD]);
 
   const handleInputChange = (event) => {
+
+    if (!isEditing) return; // Only update inputs when editing
+
     const { name, value } = event.target;
 
     // Validate input for stainingImagePath and microscopicImagePath
@@ -65,31 +95,26 @@ const DetailedVisitModal = ({ handleClose, show, visit }) => {
       }
     }
 
-    // Parse value to integer for localization and assignedDoctorId
-    const parsedValue = ['localization', 'assignedDoctorId', 'diagnosis', 'tobaccoUse', 'alcoholConsumption'].includes(name)
-      ? parseInt(value)
-      : value;
+    setVisitInfo(prevState => ({
+      ...prevState,
+      [name]: value,
+    }));
 
-    setVisitInfo({ ...visitInfo, [name]: parsedValue });
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (visitInfo.tobaccoUse === 0 || visitInfo.alcoholConsumption === 0) {
-      alert("Please make sure you make a choice for both tobacco use and alcohol consumption.");
-    } else if (!visitInfo.microscopicImagePath || !visitInfo.stainingImagePath) {
+    if (!visitInfo.microscopicImagePath || !visitInfo.stainingImagePath) {
       alert("Please enter the images url");
     } else if (visitInfo.assignedDoctorId === 0) {
       alert("Please assign a doctor to this patient.");
     } else {
-      // New visit
       try {
-        console.log("Access Token is: ", accessToken);
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: ", visit);
+        // console.log("Access Token is: ", accessToken);
 
         let genderPUT;
-        const patientGen = visit.gender;
+        const patientGen = visitInfo.gender;
         if (patientGen === 'Female') {
           genderPUT = 0;
         } else if (patientGen === 'Male') {
@@ -97,8 +122,9 @@ const DetailedVisitModal = ({ handleClose, show, visit }) => {
         } else {
           genderPUT = 2;
         }
+
         let localiz;
-        const patientLoc = visit.localization;
+        const patientLoc = visitInfo.localization;
         if (patientLoc === 'Gingiva') {
             localiz = 0;
         } else if (patientLoc === 'Palate') {
@@ -113,7 +139,7 @@ const DetailedVisitModal = ({ handleClose, show, visit }) => {
             localiz = 5;
         }
         let diagPUT;
-        const diagGen = visit.diagnosis;
+        const diagGen = visitInfo.diagnosis;
         if (diagGen === 'Leukoplakia without dysplasia') {
             diagPUT = 0;
         } else if (diagGen === 'Leukoplakia with dysplasia') {
@@ -122,7 +148,7 @@ const DetailedVisitModal = ({ handleClose, show, visit }) => {
             diagPUT = 2;
         }
         let tobPUT;
-        const tobUse = visit.tobaccoUse;
+        const tobUse = visitInfo.tobaccoUse;
         if (tobUse === 'Not Informed') {
             tobPUT = 0;
         } else if (tobUse === 'Former') {
@@ -133,7 +159,7 @@ const DetailedVisitModal = ({ handleClose, show, visit }) => {
             tobPUT = 3;
         }
         let alcoPUT;
-        const alcoCons = visit.alcoholConsumption;
+        const alcoCons = visitInfo.alcoholConsumption;
         if (alcoCons === 'Not Informed') {
             alcoPUT = 0;
         } else if (alcoCons === 'Former') {
@@ -145,7 +171,7 @@ const DetailedVisitModal = ({ handleClose, show, visit }) => {
         }
         
         let ageGp;
-        const age = visit.ageGroup;
+        const age = visitInfo.ageGroup;
         if (age === 'From 0 to 40') {
         ageGp = 0;
         } else if (age === 'From 41 to 60') {
@@ -153,6 +179,7 @@ const DetailedVisitModal = ({ handleClose, show, visit }) => {
         } else if (age === 'Above 61') {
         ageGp = 2;
         } 
+
         
         const response = await axios.put(
           `https://clinicmanagement20240427220332.azurewebsites.net/api/Visits/EditVisit/${visit.id}`,
@@ -181,6 +208,10 @@ const DetailedVisitModal = ({ handleClose, show, visit }) => {
         );
 
         console.log("Visit Updated Successfully!", response.data);
+
+        // Reload the page
+        window.location.reload();
+
         handleClose();
       } catch (error) {
         if (error.response) {
@@ -192,6 +223,7 @@ const DetailedVisitModal = ({ handleClose, show, visit }) => {
         } else {
           console.error("Error:", error.message);
         }
+
       }
     }
   };
@@ -350,28 +382,29 @@ const DetailedVisitModal = ({ handleClose, show, visit }) => {
               {isEditing ? (
                 <>
                   <button
-                    type="submit"
+                    type="button"
                     className="bg-purple-500 text-white px-6 py-3 rounded-lg hover:bg-purple-600 mr-4"
+                    onClick={handleSubmit}
                   >
                     Save Changes
                   </button>
                   <button
                     type="button"
                     className="bg-gray-200 text-black px-6 py-3 rounded-lg hover:bg-gray-500"
-                    onClick={() => setIsEditing(false)}
+                    onClick={handleClose}
                   >
                     Cancel
                   </button>
                 </>
               ) : (
                 <>
-                {/* <button
+                <button
                   type="button"
                   className="bg-purple-500 text-white px-6 py-3 rounded-lg hover:bg-purple-600 mr-4"
                   onClick={() => setIsEditing(true)}
                 >
                   Edit
-                </button> */}
+                </button>
                 <button
                 className="bg-gray-200 text-black px-6 py-3 rounded-lg hover:bg-gray-500"
                 onClick={handleClose}
