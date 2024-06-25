@@ -63,16 +63,6 @@ const RegisterEmployee = ({ handleClose, show, addEmployee }) => {
       employeeInfo.gender
     ) {
       
-    addEmployee(employeeInfo);
-    setEmployeeInfo({
-      name: "",
-      email: "",
-      phone: "",
-      username: "",
-      password: "",
-      age: '',
-      gender: '0'
-    });
 
     try {
       console.log("Access Token is: ", accessToken);
@@ -98,13 +88,34 @@ const RegisterEmployee = ({ handleClose, show, addEmployee }) => {
       );
 
       console.log("Employee Added Successfully!", response.data);
+
+      addEmployee(employeeInfo);
+      setEmployeeInfo({
+        name: "",
+        email: "",
+        phone: "",
+        username: "",
+        password: "",
+        age: '',
+        gender: '0'
+      });
+
     } catch (error) {
       if (error.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
         console.error("Employee Add Error:", error.response.data);
         console.error("Status:", error.response.status);
-        console.error("Validation Errors:", error.response.data.errors);
+
+
+        // Check if error message contains the substring "Username 'xxx' is already taken."
+        const errorMessage = error.response.data.message;
+        if (errorMessage.includes("Username")) {
+          alert("Username already taken. Please choose a different username.");
+        } else {
+          // Handle other errors here if needed
+          console.error("Validation Errors:", error.response.data.errors);
+        }
       } else if (error.request) {
         // The request was made but no response was received
         console.error("Network Error:", error.request);
