@@ -19,9 +19,21 @@ function PatientRecordContainer({ patientID }) {
 
   useEffect(() => {
     const storedVisitId = localStorage.getItem("visitId");
+
     if (storedVisitId) {
+      // Set the visitId state with the storedVisitId
       setVisitId(storedVisitId);
       console.log("visit id:", storedVisitId);
+
+      // Retrieve existing predictions from local storage
+      const existingPredictions =
+        JSON.parse(localStorage.getItem("predictions")) || {};
+
+      // Retrieve the diagnosis for the stored visitId
+      const aiDiagnosis = existingPredictions[storedVisitId];
+
+      // Now you can use aiDiagnosis as needed
+      console.log("AI Diagnosis for visit id", storedVisitId, ":", aiDiagnosis);
     }
   }, []);
 
@@ -98,13 +110,13 @@ function PatientRecordContainer({ patientID }) {
 
           switch (visitsDB.patientData.aiDiagnosis) {
             case 0:
-              diagnosis = "Leukoplakia without dysplasia";
+              diagnosis = "Low Cancer Risk";
               break;
             case 1:
-              diagnosis = "Leukoplakia with dysplasia";
+              diagnosis = "Moderate Cancer Risk";
               break;
             default:
-              diagnosis = "OSCC";
+              diagnosis = "High Cancer Risk";
               break;
           }
 
@@ -224,6 +236,16 @@ function PatientRecordContainer({ patientID }) {
     }
   };
 
+  // Retrieve the AI diagnosis from local storage
+  const storedPredictions =
+    JSON.parse(localStorage.getItem("predictions")) || {};
+  console.log("Stored predictions from local storage:", storedPredictions);
+
+  const aiDiagnosis = storedPredictions[visitId];
+  console.log("AI Diagnosis for visitId:", visitId, aiDiagnosis);
+
+  console.log("Rendering patient data:", patientData);
+
   const handleSaveComment = async () => {
     try {
       console.log("Saving new comment:", newCommentText); // Log new comment text
@@ -246,8 +268,18 @@ function PatientRecordContainer({ patientID }) {
 
       console.log("PUT request response:", response.data);
 
+      // Save comment to local storage
+      const comments = JSON.parse(localStorage.getItem("comments")) || {};
+      comments[storedVisitId] = newCommentText;
+      localStorage.setItem("comments", JSON.stringify(comments));
+
+      console.log("comments", comments);
       // Update latest comment in state upon successful request
-      setLatestComment(newCommentText);
+      const updatedPatientData = {
+        ...patientData,
+        doctorComment: newCommentText,
+      };
+      setPatientData(updatedPatientData);
 
       // setPopupOpen(false); // Close comment popup if needed
     } catch (error) {
@@ -311,7 +343,7 @@ function PatientRecordContainer({ patientID }) {
         </div>
         <div>
           <h1>AI Detector Result</h1>
-          <p>{patientData.diagnosis}</p>
+          <p>{aiDiagnosis}</p>
           <br />
         </div>
         <div>

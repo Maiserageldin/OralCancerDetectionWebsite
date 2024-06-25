@@ -1,10 +1,16 @@
 import axios from "axios";
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext } from "react";
 import { AccessTokenContext } from "../AccessTokenContext.jsx";
-import DetailedVisitModal from './DetailedVisitModal';
+import DetailedVisitModal from "./DetailedVisitModal";
 import "./styles/employeeHome.css";
 
-function ViewVisitsModal({ handleClose, show, loading, visits, selectedPatientName }) {
+function ViewVisitsModal({
+  handleClose,
+  show,
+  loading,
+  visits,
+  selectedPatientName,
+}) {
   const showHideClassName = show ? "modal display-block" : "modal display-none";
   const { accessToken } = useContext(AccessTokenContext);
 
@@ -32,11 +38,23 @@ function ViewVisitsModal({ handleClose, show, loading, visits, selectedPatientNa
       );
 
       console.log("Prediction Request Successful!", response.data);
-      setPredictionResponse({
+      const newPrediction = {
         visitId: visitId,
-        prediction: response.data.aiDiagnosis
-      });
+        prediction: response.data.aiDiagnosis,
+      };
 
+      setPredictionResponse(newPrediction);
+
+      // Retrieve existing predictions from local storage
+      const existingPredictions =
+        JSON.parse(localStorage.getItem("predictions")) || {};
+      // Add new prediction to the existing predictions
+      existingPredictions[visitId] = response.data.aiDiagnosis;
+      // Save updated predictions back to local storage
+      localStorage.setItem("predictions", JSON.stringify(existingPredictions));
+
+      // Print the updated predictions to the console
+      console.log("Updated predictions:", existingPredictions);
     } catch (error) {
       if (error.response) {
         console.error("Prediction Model Error:", error.response.data);
@@ -53,7 +71,9 @@ function ViewVisitsModal({ handleClose, show, loading, visits, selectedPatientNa
   return (
     <div className={showHideClassName}>
       <section className="viewVisitsmodal-main">
-        <button className="viewVisitsclose-btn" onClick={handleClose}>X</button>
+        <button className="viewVisitsclose-btn" onClick={handleClose}>
+          X
+        </button>
         <div className="visits-list-container">
           {loading ? (
             <p>Loading...</p>
@@ -63,10 +83,10 @@ function ViewVisitsModal({ handleClose, show, loading, visits, selectedPatientNa
             <>
               <p>This is all the visits for {selectedPatientName}.</p>
               <ul className="visits-list">
-                {visits.map(visit => (
+                {visits.map((visit) => (
                   <li key={visit.id} onClick={() => handleVisitClick(visit)}>
                     <div className="item">
-                      <span>{visit.date.split('T')[0]}</span>
+                      <span>{visit.date.split("T")[0]}</span>
                       <div className="details">
                         <p>Visit Number: {visit.visitNumber}</p>
                         <p>Assigned Doctor: {visit.doctorName}</p>
@@ -81,9 +101,12 @@ function ViewVisitsModal({ handleClose, show, loading, visits, selectedPatientNa
                           Predict Cancer Risk
                         </button>
                         {/* Display prediction response if available */}
-                        {predictionResponse && predictionResponse.visitId === visit.id && (
-                          <p className="prediction-response">{predictionResponse.prediction}</p>
-                        )}
+                        {predictionResponse &&
+                          predictionResponse.visitId === visit.id && (
+                            <p className="prediction-response">
+                              {predictionResponse.prediction}
+                            </p>
+                          )}
                       </div>
                     </div>
                   </li>

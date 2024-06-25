@@ -13,14 +13,33 @@ function PatientRecordContainer({ userId }) {
   const [currentImageId, setCurrentImageId] = useState(null);
   const [patientData, setPatientData] = useState(null);
   const [visitId, setVisitId] = useState(null);
-
+  const [diagnosis, setDiagnosis] = useState(null);
   const { accessToken } = useContext(AccessTokenContext);
+  const [comments, setComments] = useState("");
 
   useEffect(() => {
     const storedVisitId = localStorage.getItem("visitId");
+
     if (storedVisitId) {
+      // Set the visitId state with the storedVisitId
       setVisitId(storedVisitId);
       console.log("visit id:", storedVisitId);
+
+      // Retrieve existing predictions from local storage
+      const existingPredictions =
+        JSON.parse(localStorage.getItem("predictions")) || {};
+
+      // Retrieve the diagnosis for the stored visitId
+      const aiDiagnosis = existingPredictions[storedVisitId];
+
+      // Now you can use aiDiagnosis as needed
+      console.log("AI Diagnosis for visit id", storedVisitId, ":", aiDiagnosis);
+
+      // Fetch comments from local storage
+      const storedComments = JSON.parse(localStorage.getItem("comments")) || {};
+      const updatedComments = storedComments[storedVisitId];
+      setComment(updatedComments);
+      console.log("stored comment", updatedComments);
     }
   }, []);
 
@@ -96,13 +115,13 @@ function PatientRecordContainer({ userId }) {
 
           switch (visitsDB.patientData.aiDiagnosis) {
             case 0:
-              diagnosis = "Leukoplakia without dysplasia";
+              diagnosis = "Low Cancer Risk";
               break;
             case 1:
-              diagnosis = "Leukoplakia with dysplasia";
+              diagnosis = "Moderate Cancer Risk";
               break;
             default:
-              diagnosis = "OSCC";
+              diagnosis = "High Cancer Risk";
               break;
           }
 
@@ -160,7 +179,7 @@ function PatientRecordContainer({ userId }) {
           return {
             id: visitsDB.id.toString(), // Ensure id is a string
             visitNumber: visitsDB.visitNumber,
-            name:visitsDB.patientName,
+            name: visitsDB.patientName,
             date: new Date(visitsDB.date).toISOString().split("T")[0],
             ageGroup: ageGroup,
             gender: gender,
@@ -207,6 +226,16 @@ function PatientRecordContainer({ userId }) {
     setIsFullScreen(!!document.fullscreenElement);
   };
 
+  // Retrieve the AI diagnosis from local storage
+  const storedPredictions =
+    JSON.parse(localStorage.getItem("predictions")) || {};
+  console.log("Stored predictions from local storage:", storedPredictions);
+
+  const aiDiagnosis = storedPredictions[visitId];
+  console.log("AI Diagnosis for visitId:", visitId, aiDiagnosis);
+
+  console.log("Rendering patient data:", patientData);
+
   const toggleFullScreen = (imageId) => {
     if (!isFullScreen) {
       const img = document.querySelector(`#${imageId}`);
@@ -241,8 +270,6 @@ function PatientRecordContainer({ userId }) {
       </div>
     );
   }
-
-  console.log("Rendering patient data:", patientData);
 
   return (
     <div className="Middle-Page">
@@ -284,12 +311,13 @@ function PatientRecordContainer({ userId }) {
         </div>
         <div>
           <h1>AI Detector Result</h1>
-          <p>{patientData.diagnosis}</p>
+          <p>{aiDiagnosis}</p>
           <br />
         </div>
         <div>
           <h1>Doctor Comment</h1>
-          <p>{patientData.doctorComment || "No comment available"}</p>
+          <p>{comment}</p>
+          {/* <p>{patientData.doctorComment || "No comment available"}</p> */}
         </div>
       </div>
     </div>
