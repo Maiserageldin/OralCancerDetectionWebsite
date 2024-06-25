@@ -1,16 +1,15 @@
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
+import React, { useState, useContext } from 'react';
 import { AccessTokenContext } from "../AccessTokenContext.jsx";
-import "./styles/employeeHome.css";
-import React, { useState, useEffect, useContext } from 'react';
 import DetailedVisitModal from './DetailedVisitModal';
+import "./styles/employeeHome.css";
 
-function ViewVisitsModal({ handleClose, show, visits, selectedPatientName }) {
+function ViewVisitsModal({ handleClose, show, loading, visits, selectedPatientName }) {
   const showHideClassName = show ? "modal display-block" : "modal display-none";
   const { accessToken } = useContext(AccessTokenContext);
 
   const [selectedVisit, setSelectedVisit] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [predictionResponse, setPredictionResponse] = useState(null);
 
   const handleVisitClick = (visit) => {
     setSelectedVisit(visit);
@@ -20,15 +19,36 @@ function ViewVisitsModal({ handleClose, show, visits, selectedPatientName }) {
     setSelectedVisit(null);
   };
 
-  useEffect(() => {
-    if (show) {
-      setLoading(true);
-      // Simulate a delay for fetching data
-      setTimeout(() => {
-        setLoading(false);
-      }, 1000);
+  const handleModelPrediction = async (visitId) => {
+    try {
+      const response = await axios.put(
+        `https://clinicmanagement20240427220332.azurewebsites.net/api/Visits/Predict/VisitId/${visitId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      console.log("Prediction Request Successful!", response.data);
+      setPredictionResponse({
+        visitId: visitId,
+        prediction: response.data.aiDiagnosis
+      });
+
+    } catch (error) {
+      if (error.response) {
+        console.error("Prediction Model Error:", error.response.data);
+        console.error("Status:", error.response.status);
+        console.error("Validation Errors:", error.response.data.errors);
+      } else if (error.request) {
+        console.error("Network Error:", error.request);
+      } else {
+        console.error("Error:", error.message);
+      }
     }
-  }, [show]);
+  };
 
   return (
     <div className={showHideClassName}>
@@ -51,6 +71,19 @@ function ViewVisitsModal({ handleClose, show, visits, selectedPatientName }) {
                         <p>Visit Number: {visit.visitNumber}</p>
                         <p>Assigned Doctor: {visit.doctorName}</p>
                         <p>Speciality: {visit.speciality}</p>
+                        <button
+                          className="model-prediction-btn"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleModelPrediction(visit.id);
+                          }}
+                        >
+                          Predict Cancer Risk
+                        </button>
+                        {/* Display prediction response if available */}
+                        {predictionResponse && predictionResponse.visitId === visit.id && (
+                          <p className="prediction-response">{predictionResponse.prediction}</p>
+                        )}
                       </div>
                     </div>
                   </li>
